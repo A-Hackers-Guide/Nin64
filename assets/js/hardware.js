@@ -112,8 +112,8 @@ export async function benchmark() {
 
 export function tierFor(consoleKey) {
   return ({
-    nes: 1, snes: 1, gb: 1, gba: 1,
-    n64: 2,
+    nes: 1, snes: 1, gb: 1, gba: 1, genesis: 1,
+    n64: 2, ps1: 2,
     gamecube: 3, wii: 3,
     wiiu: 4, switch: 4,
   })[consoleKey] ?? 1;

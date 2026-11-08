@@ -25,6 +25,13 @@ const EXT_TO_CORE = {
   gb:   { console: 'gb',       core: 'gambatte' },
   gbc:  { console: 'gb',       core: 'gambatte' },
   gba:  { console: 'gba',      core: 'mgba' },
+  gen:  { console: 'genesis',  core: 'genesis_plus_gx' },
+  md:   { console: 'genesis',  core: 'genesis_plus_gx' },
+  smd:  { console: 'genesis',  core: 'genesis_plus_gx' },
+  pbp:  { console: 'ps1',      core: 'pcsx_rearmed' },
+  chd:  { console: 'ps1',      core: 'pcsx_rearmed' },
+  cue:  { console: 'ps1',      core: 'pcsx_rearmed' },
+  bin:  { console: 'ps1',      core: 'pcsx_rearmed' },
 };
 
 function openDb() {

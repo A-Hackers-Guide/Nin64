@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PlayStation — Nin64</title>
+<link rel="stylesheet" href="ps1.css">
+</head>
+<body>
+<div id="boot" class="boot">
+  <div>
+    <div class="logo">
+      <div class="bar"></div>
+      <div class="mark"><b>PS</b></div>
+      <div class="bar r"></div>
+    </div>
+    <div class="press">PRESS START</div>
+  </div>
+</div>
+
+<div id="memcard" class="memcard">
+  <div class="mc-title">MEMORY CARD · SLOT 1</div>
+  <div class="slots" id="slots"></div>
+  <div class="actions">
+    <button class="btn" id="library-btn">Library</button>
+    <button class="btn" id="settings-btn">Options</button>
+    <button class="btn" id="home-btn">Exit</button>
+  </div>
+</div>
+
+<div class="shapes">
+  <span class="tri">△</span><span class="cir">○</span><span class="x">✕</span><span class="sq">□</span>
+</div>
+
+<div id="library-modal" class="modal">
+  <div class="sheet">
+    <h2>Library</h2>
+    <p class="lead">Add .cue / .pbp / .chd — stored locally.</p>
+    <div style="display:flex;gap:10px;margin-bottom:14px">
+      <button class="btn pri" id="lib-add">Add ROM</button>
+      <input type="file" id="lib-input" multiple accept=".cue,.pbp,.chd,.bin" hidden>
+      <button class="btn" data-close>Back</button>
+    </div>
+    <div id="lib-list"></div>
+  </div>
+</div>
+
+<div id="settings-modal" class="modal">
+  <div class="sheet">
+    <h2>Options</h2>
+    <p class="lead">Nin64 PlayStation 1.0</p>
+    <div class="setrow"><span>Name</span><input type="text" id="ps1-user"></div>
+    <div class="setrow"><span>Sound</span><div class="toggle on" id="ps1-sound"></div></div>
+    <div style="display:flex;gap:10px;margin-top:20px;justify-content:space-between">
+      <button class="btn pri" id="ps1-export">Export this console as HTML</button>
+      <button class="btn" data-close>Back</button>
+    </div>
+  </div>
+</div>
+
+<div class="emu-mount" id="emu-mount"></div>
+<button class="emu-close" id="emu-close" style="display:none">Stop</button>
+<script type="module" src="ps1.js"></script>
+</body>
+</html>

@@ -237,12 +237,15 @@ main.stage {
   filter: blur(14px);
   transition: opacity 0.3s ease;
 }
-.card:hover {
+.card:hover,
+.card.focus {
   transform: translateY(-10px) rotateX(2deg) scale(1.03);
   border-color: var(--accent);
   box-shadow: 0 30px 60px rgba(0,0,0,0.6), var(--glow);
 }
-.card:hover::before { opacity: 0.6; }
+.card:hover::before,
+.card.focus::before { opacity: 0.6; }
+.card.focus { outline: 2px solid rgba(255,255,255,0.3); outline-offset: 4px; }
 
 .card.locked { opacity: 0.55; cursor: not-allowed; }
 .card.locked:hover { transform: none; }

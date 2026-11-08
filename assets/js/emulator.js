@@ -19,6 +19,8 @@ const CORE_FOR = {
   wii: 'dolphin',
   gb: 'gambatte',
   gba: 'mgba',
+  genesis: 'genesis_plus_gx',
+  ps1: 'pcsx_rearmed',
 };
 
 export function canEmulate(consoleKey) {

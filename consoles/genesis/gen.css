@@ -1,0 +1,39 @@
+/* Genesis — black + red */
+:root{--bg:#0a0a0a;--fg:#fafafa;--red:#dc2626;--mid:#525252;--gold:#eab308;}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;height:100%;background:linear-gradient(180deg,#171717,#000);color:var(--fg);font-family:"Helvetica Neue",sans-serif;overflow:hidden;user-select:none;-webkit-user-select:none;}
+body::before{content:'';position:fixed;inset:0;z-index:40;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.2) 0 2px,transparent 2px 4px);opacity:.5;}
+body::after{content:'';position:fixed;inset:0;z-index:41;pointer-events:none;background:radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,.7));}
+
+.boot{position:fixed;inset:0;display:grid;place-items:center;z-index:100;background:#0a0a0a;transition:opacity .9s;}
+.boot.done{opacity:0;pointer-events:none;}
+.boot .plate{font-size:70px;font-weight:900;color:var(--red);letter-spacing:-.04em;text-shadow:3px 3px 0 #7f1d1d,6px 6px 20px rgba(220,38,38,.4);font-style:italic;animation:slamIn .8s cubic-bezier(.2,.9,.3,1.1) forwards;}
+.boot .sub{color:#737373;letter-spacing:.3em;margin-top:10px;font-size:12px;text-align:center;}
+@keyframes slamIn{from{transform:translateX(-80px) skewX(-20deg);opacity:0;}to{transform:translateX(0) skewX(0);opacity:1;}}
+
+.menu{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;padding:40px;z-index:10;}
+.menu.on{display:flex;}
+.title{font-size:36px;font-weight:900;color:var(--red);letter-spacing:.05em;margin:20px 0 30px;font-style:italic;text-shadow:2px 2px 0 rgba(0,0,0,.5);}
+.carts{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;width:min(900px,90vw);max-height:60vh;overflow:auto;padding:10px;}
+.cart{aspect-ratio:3/2;background:linear-gradient(180deg,#171717,#000);border:3px solid var(--red);border-radius:4px;padding:12px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;transition:transform .15s;position:relative;overflow:hidden;}
+.cart::before{content:'';position:absolute;inset:4px;border:1px solid rgba(220,38,38,.3);pointer-events:none;}
+.cart:hover{transform:translateY(-4px);box-shadow:0 6px 20px rgba(220,38,38,.4);}
+.cart.add{border-style:dashed;color:var(--red);display:grid;place-items:center;font-size:36px;background:transparent;}
+.cart .label{background:#fafafa;color:#0a0a0a;padding:4px 8px;font-size:12px;font-weight:700;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.cart .sub{color:var(--gold);font-size:10px;text-align:center;letter-spacing:.1em;text-transform:uppercase;}
+.actions{display:flex;gap:12px;margin-top:24px;}
+.btn{padding:12px 22px;background:transparent;color:var(--red);border:2px solid var(--red);font-family:inherit;font-size:12px;letter-spacing:.1em;cursor:pointer;font-weight:700;border-radius:0;text-transform:uppercase;}
+.btn:hover{background:var(--red);color:#fff;}
+.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.85);z-index:60;backdrop-filter:blur(6px);}
+.modal.on{display:flex;}
+.sheet{width:min(600px,94vw);max-height:86vh;background:#0a0a0a;border:2px solid var(--red);padding:30px;overflow:auto;}
+.sheet h2{color:var(--red);margin:0 0 6px;letter-spacing:.1em;font-size:20px;text-transform:uppercase;}
+.sheet .lead{color:#737373;font-size:12px;margin:0 0 20px;}
+.setrow{display:grid;grid-template-columns:1fr auto;padding:14px 0;border-bottom:1px solid #262626;align-items:center;font-size:13px;}
+.setrow input[type=text]{background:#171717;color:var(--fg);border:1px solid var(--red);padding:6px 10px;font-family:inherit;font-size:13px;outline:none;}
+.toggle{position:relative;width:44px;height:24px;background:#262626;border:1px solid var(--red);cursor:pointer;}.toggle.on{background:var(--red);}.toggle::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;background:#fff;transition:left .15s;}.toggle.on::after{left:22px;}
+.rom-row{display:grid;grid-template-columns:1fr auto auto;gap:10px;padding:10px 14px;border:1px solid #262626;align-items:center;font-size:13px;margin-bottom:6px;}
+.rom-row .play{background:var(--red);color:#fff;padding:4px 12px;border:0;font-family:inherit;cursor:pointer;font-size:11px;font-weight:700;}
+.emu-mount{position:fixed;inset:0;background:#000;z-index:200;display:none;}.emu-mount.on{display:block;}
+.emu-close{position:fixed;top:12px;right:12px;z-index:210;padding:8px 14px;background:rgba(0,0,0,.6);color:#fff;border:1px solid #333;border-radius:999px;font-size:12px;cursor:pointer;}
+.emu-unsupported{display:grid;place-items:center;height:100vh;color:#fff;padding:40px;text-align:center;}

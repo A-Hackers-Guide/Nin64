@@ -102,6 +102,16 @@ const CATALOG = {
     { id: 'gba-first-rom',   name: 'Indigo Insert',              desc: 'Add a .gba ROM.' },
     { id: 'gba-play',        name: '32 Bits of Sun',             desc: 'Launch a GBA game.' },
   ],
+  genesis: [
+    { id: 'gen-boot',        name: 'Does What Nintendon\'t',      desc: 'Boot the Genesis menu.' },
+    { id: 'gen-first-rom',   name: 'Blast Processing',           desc: 'Add a .gen / .md / .smd ROM.' },
+    { id: 'gen-play',        name: 'Welcome to the Next Level',  desc: 'Launch a Genesis game.' },
+  ],
+  ps1: [
+    { id: 'ps1-boot',        name: 'Memory Card In',             desc: 'Boot into the PS1 menu.' },
+    { id: 'ps1-first-rom',   name: 'CD Rolling',                 desc: 'Add a .cue / .pbp / .chd ROM.' },
+    { id: 'ps1-play',        name: 'Shapes on the Button',       desc: 'Launch a PS1 game.' },
+  ],
 };
 
 export function catalog(consoleKey) { return CATALOG[consoleKey] || []; }
@@ -263,19 +273,19 @@ function showToast(title, desc) {
 
 /* Boot-up achievement trigger: every console calls this once on load. */
 export async function recordBoot(consoleKey) {
-  const bootKey = { wii:'wii-boot', gamecube:'gc-boot', wiiu:'wu-boot', switch:'sw-boot', n64:'n64-boot', nes:'nes-start', snes:'snes-start', gb:'gb-boot', gba:'gba-boot' }[consoleKey];
+  const bootKey = { wii:'wii-boot', gamecube:'gc-boot', wiiu:'wu-boot', switch:'sw-boot', n64:'n64-boot', nes:'nes-start', snes:'snes-start', gb:'gb-boot', gba:'gba-boot', genesis:'gen-boot', ps1:'ps1-boot' }[consoleKey];
   if (bootKey) await unlock(consoleKey, bootKey);
 }
 
 export async function recordRomAdded(consoleKey, totalCount) {
-  const firstKey = { wii:'wii-first-rom', gamecube:'gc-first-rom', wiiu:'wu-first-rom', n64:'n64-first-rom', nes:'nes-first-rom', snes:'snes-first-rom', gb:'gb-first-rom', gba:'gba-first-rom' }[consoleKey];
+  const firstKey = { wii:'wii-first-rom', gamecube:'gc-first-rom', wiiu:'wu-first-rom', n64:'n64-first-rom', nes:'nes-first-rom', snes:'snes-first-rom', gb:'gb-first-rom', gba:'gba-first-rom', genesis:'gen-first-rom', ps1:'ps1-first-rom' }[consoleKey];
   if (firstKey && totalCount >= 1) await unlock(consoleKey, firstKey);
   if (consoleKey === 'wii' && totalCount >= 10) await unlock('wii', 'wii-ten');
   if (consoleKey === 'switch' && totalCount >= 10) await unlock('switch', 'sw-ten');
 }
 
 export async function recordPlay(consoleKey) {
-  const playKey = { wii:'wii-play', gamecube:'gc-play', n64:'n64-play', nes:'nes-play', snes:'snes-play', gb:'gb-play', gba:'gba-play' }[consoleKey];
+  const playKey = { wii:'wii-play', gamecube:'gc-play', n64:'n64-play', nes:'nes-play', snes:'snes-play', gb:'gb-play', gba:'gba-play', genesis:'gen-play', ps1:'ps1-play' }[consoleKey];
   if (playKey) await unlock(consoleKey, playKey);
 }
 
@@ -330,6 +340,7 @@ function _attach(consoleKey) {
   // Keyboard hooks
   window.addEventListener('keydown', e => {
     if (e.key === 'F3') { e.preventDefault(); openPanel(consoleKey); }
+    if (e.key === 'F4') { e.preventDefault(); toggleCrt(consoleKey); }
     if (e.key === 'F2') {
       e.preventDefault();
       const canvas = document.querySelector('.emu-mount canvas, #emu-mount canvas');
@@ -343,6 +354,37 @@ function _attach(consoleKey) {
       }
     }
   });
+
+  // Restore CRT preference
+  if (localStorage.getItem(`crt:${consoleKey}`) === '1') applyCrt(true);
+}
+
+/* ---------- CRT overlay ---------- */
+
+function applyCrt(on) {
+  let el = document.getElementById('nin64-crt');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'nin64-crt';
+    el.style.cssText = `
+      position: fixed; inset: 0; pointer-events: none; z-index: 220;
+      background:
+        repeating-linear-gradient(0deg, rgba(0,0,0,0.18) 0 2px, transparent 2px 4px),
+        radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.5) 100%);
+      mix-blend-mode: multiply;
+      opacity: 0; transition: opacity 0.3s ease;
+    `;
+    document.body.appendChild(el);
+  }
+  requestAnimationFrame(() => el.style.opacity = on ? '1' : '0');
+}
+
+export function toggleCrt(consoleKey) {
+  const key = `crt:${consoleKey}`;
+  const next = localStorage.getItem(key) === '1' ? '0' : '1';
+  localStorage.setItem(key, next);
+  applyCrt(next === '1');
+  showToast(next === '1' ? '📺 CRT overlay on' : '📺 CRT overlay off', 'Press F4 to toggle');
 }
 
 function openPanel(consoleKey) {

@@ -105,9 +105,11 @@ const CONSOLES = [
   { key: 'wiiu',     name: 'Wii U',      sub: '2012',                  tier: 4 },
   { key: 'switch',   name: 'Switch',     sub: '2017',                  tier: 4 },
   { key: 'n64',      name: 'N64',        sub: '1996',                  tier: 2 },
+  { key: 'ps1',      name: 'PlayStation', sub: '1994',                 tier: 2 },
   { key: 'gba',      name: 'Game Boy Advance', sub: '2001',            tier: 1 },
   { key: 'gb',       name: 'Game Boy',   sub: '1989',                  tier: 1 },
   { key: 'snes',     name: 'SNES',       sub: '1990',                  tier: 1 },
+  { key: 'genesis',  name: 'Genesis',    sub: '1988',                  tier: 1 },
   { key: 'nes',      name: 'NES',        sub: '1983',                  tier: 1 },
 ];
 
@@ -182,6 +184,22 @@ const SILHOUETTES = {
     <circle cx="96" cy="72" r="3" fill="#dc2626"/>
     <circle cx="104" cy="82" r="3" fill="#16a34a"/>
     <rect x="16" y="78" width="4" height="4" fill="#1e1b4b"/>
+  </svg>`,
+  genesis: `<svg viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg">
+    <rect x="16" y="56" width="88" height="48" rx="3" fill="#1a1a1a" stroke="#dc2626" stroke-width="1.5"/>
+    <rect x="22" y="62" width="76" height="4" rx="1" fill="#dc2626"/>
+    <circle cx="50" cy="84" r="8" fill="#0a0a0a" stroke="#dc2626"/>
+    <rect x="66" y="80" width="28" height="8" rx="1" fill="#2a2a2a"/>
+    <rect x="22" y="104" width="76" height="4" fill="#dc2626" opacity="0.6"/>
+  </svg>`,
+  ps1: `<svg viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg">
+    <rect x="14" y="52" width="92" height="56" rx="2" fill="#d4d4d4" stroke="#737373" stroke-width="1.2"/>
+    <circle cx="60" cy="80" r="22" fill="#525252" stroke="#737373" stroke-width="1"/>
+    <circle cx="60" cy="80" r="6" fill="#171717"/>
+    <rect x="22" y="100" width="12" height="4" fill="#525252"/>
+    <rect x="42" y="100" width="12" height="4" fill="#dc2626"/>
+    <rect x="62" y="100" width="12" height="4" fill="#eab308"/>
+    <rect x="82" y="100" width="12" height="4" fill="#16a34a"/>
   </svg>`,
   nes: `<svg viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg">
     <rect x="12" y="60" width="96" height="40" rx="2" fill="#d1d5db" stroke="#9ca3af" stroke-width="1"/>
@@ -283,6 +301,9 @@ async function init() {
     el.style.animationDelay = `${0.15 + i * 0.08}s`;
     ring.appendChild(el);
   });
+
+  // Keyboard + gamepad nav
+  setupInputs(ring);
 
   // Library
   document.getElementById('open-library').addEventListener('click', openLibrary);
@@ -404,6 +425,116 @@ async function refreshStorage() {
   document.getElementById('cr-roms').textContent  = `${s.counts.roms} file${s.counts.roms === 1 ? '' : 's'} · ${formatBytes(s.roms)}`;
   document.getElementById('cr-shots').textContent = `${s.counts.screenshots} · ${formatBytes(s.screenshots)}`;
   document.getElementById('cr-saves').textContent = `${s.counts.saves} · ${formatBytes(s.saves)}`;
+}
+
+/* ---------- Input: keyboard + gamepad ---------- */
+
+function setupInputs(ring) {
+  const cards = () => [...ring.querySelectorAll('.card')];
+  let focusIdx = 0;
+  function focus(i) {
+    const cs = cards();
+    if (!cs.length) return;
+    focusIdx = ((i % cs.length) + cs.length) % cs.length;
+    cs.forEach((el, j) => el.classList.toggle('focus', j === focusIdx));
+    cs[focusIdx].scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+    play('picker', 'hover');
+  }
+  function activate() {
+    const cs = cards();
+    cs[focusIdx]?.click();
+  }
+
+  // Grid-aware nav: use bounding rects to find the best neighbour in a direction.
+  function go(dir) {
+    const cs = cards();
+    const current = cs[focusIdx];
+    if (!current) { focus(0); return; }
+    const r = current.getBoundingClientRect();
+    const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+    let best = -1, bestScore = Infinity;
+    cs.forEach((el, i) => {
+      if (i === focusIdx) return;
+      const rr = el.getBoundingClientRect();
+      const ex = rr.left + rr.width / 2, ey = rr.top + rr.height / 2;
+      const dx = ex - cx, dy = ey - cy;
+      const inDir =
+        (dir === 'right' && dx > 10) ||
+        (dir === 'left'  && dx < -10) ||
+        (dir === 'down'  && dy > 10) ||
+        (dir === 'up'    && dy < -10);
+      if (!inDir) return;
+      const prim = (dir === 'left' || dir === 'right') ? Math.abs(dx) : Math.abs(dy);
+      const perp = (dir === 'left' || dir === 'right') ? Math.abs(dy) : Math.abs(dx);
+      const score = prim + perp * 3; // penalise off-axis
+      if (score < bestScore) { bestScore = score; best = i; }
+    });
+    if (best >= 0) focus(best);
+  }
+
+  window.addEventListener('keydown', e => {
+    const open = document.querySelector('.modal.open');
+    if (open) {
+      if (e.key === 'Escape') { open.classList.remove('open'); e.preventDefault(); }
+      return;
+    }
+    switch (e.key) {
+      case 'ArrowRight': go('right'); e.preventDefault(); break;
+      case 'ArrowLeft':  go('left');  e.preventDefault(); break;
+      case 'ArrowUp':    go('up');    e.preventDefault(); break;
+      case 'ArrowDown':  go('down');  e.preventDefault(); break;
+      case 'Enter':
+      case ' ':          activate();  e.preventDefault(); break;
+      case 'l': case 'L': document.getElementById('open-library').click(); e.preventDefault(); break;
+      case 'd': case 'D': document.getElementById('hw-disk').click();      e.preventDefault(); break;
+    }
+  });
+
+  // Gamepad polling
+  let last = { ax0: 0, ay0: 0, a: 0, b: 0, lb: 0, rb: 0 };
+  function poll() {
+    const gps = navigator.getGamepads?.() || [];
+    for (const g of gps) {
+      if (!g) continue;
+      const open = !!document.querySelector('.modal.open');
+      const ax = g.axes[0] || 0, ay = g.axes[1] || 0;
+      const dpadRight = g.buttons[15]?.pressed || ax >  0.5;
+      const dpadLeft  = g.buttons[14]?.pressed || ax < -0.5;
+      const dpadDown  = g.buttons[13]?.pressed || ay >  0.5;
+      const dpadUp    = g.buttons[12]?.pressed || ay < -0.5;
+      const aBtn      = g.buttons[0]?.pressed;
+      const bBtn      = g.buttons[1]?.pressed;
+      const lbBtn     = g.buttons[4]?.pressed;
+      const rbBtn     = g.buttons[5]?.pressed;
+
+      // edge-trigger axis movement
+      if (!open) {
+        if (dpadRight && !(last.lastRight ?? false)) go('right');
+        if (dpadLeft  && !(last.lastLeft ?? false))  go('left');
+        if (dpadDown  && !(last.lastDown ?? false))  go('down');
+        if (dpadUp    && !(last.lastUp ?? false))    go('up');
+        if (aBtn      && !last.a)  activate();
+        if (lbBtn     && !last.lb) document.getElementById('open-library').click();
+        if (rbBtn     && !last.rb) document.getElementById('hw-disk').click();
+      } else {
+        if (bBtn && !last.b) {
+          const openModal = document.querySelector('.modal.open');
+          if (openModal) openModal.classList.remove('open');
+        }
+      }
+      last = { ...last,
+        lastRight: dpadRight, lastLeft: dpadLeft, lastDown: dpadDown, lastUp: dpadUp,
+        a: aBtn, b: bBtn, lb: lbBtn, rb: rbBtn,
+      };
+      break; // one controller is enough
+    }
+    requestAnimationFrame(poll);
+  }
+  requestAnimationFrame(poll);
+
+  // Start with first unlocked card focused
+  const first = [...ring.querySelectorAll('.card:not(.locked)')][0];
+  if (first) focus(cards().indexOf(first));
 }
 
 if (document.readyState === 'loading') {

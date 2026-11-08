@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Switch Home — retroboot</title>
+<link rel="stylesheet" href="sw.css">
+</head>
+<body>
+
+<div id="boot" class="boot"><div class="mark"></div></div>
+
+<div class="topbar">
+  <div class="user">
+    <div class="avatar"></div>
+    <div><div class="user-name">Player</div><div class="user-sub">Local profile</div></div>
+  </div>
+  <div class="spacer"></div>
+  <div class="status-chip" id="clock">--:--</div>
+</div>
+
+<div class="tiles" id="tiles"></div>
+
+<div class="iconbar">
+  <div class="ibtn" id="ib-news" title="News"><svg viewBox="0 0 24 24"><path d="M3 4h18v16H3z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M6 8h12M6 12h12M6 16h8" stroke="currentColor" stroke-width="2"/></svg></div>
+  <div class="ibtn" id="ib-eshop" title="eShop"><svg viewBox="0 0 24 24"><path d="M3 7h18l-2 13H5L3 7z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 7V5a4 4 0 0 1 8 0v2" fill="none" stroke="currentColor" stroke-width="2"/></svg></div>
+  <div class="ibtn" id="ib-album" title="Album"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="9" cy="11" r="2"/><path d="M3 17l6-6 4 4 3-3 5 5" fill="none" stroke="currentColor" stroke-width="2"/></svg></div>
+  <div class="ibtn" id="ib-games" title="All Games"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/></svg></div>
+  <div class="ibtn" id="ib-controllers" title="Controllers"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="10" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="7" cy="12" r="1.5"/><circle cx="17" cy="12" r="1.5"/></svg></div>
+  <div class="ibtn" id="ib-settings" title="System Settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9 1.65 1.65 0 0 0 4.27 7.18l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6 1.65 1.65 0 0 0 10 3.09V3a2 2 0 1 1 4 0v.09A1.65 1.65 0 0 0 15 4.6a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c0 .66.39 1.25 1 1.51H21a2 2 0 1 1 0 4h-.09c-.61 0-1 .59-1.51 1z" fill="none" stroke="currentColor" stroke-width="2"/></svg></div>
+  <div class="ibtn" id="ib-power" title="Sleep"><svg viewBox="0 0 24 24"><path d="M12 2v10M5.6 6.6a9 9 0 1 0 12.8 0" fill="none" stroke="currentColor" stroke-width="2"/></svg></div>
+</div>
+
+<div class="clockbar">
+  <span>Battery · 100% · Wi-Fi · Local</span>
+  <span>retroboot · Switch v1</span>
+</div>
+
+<!-- Library modal -->
+<div id="library-modal" class="modal">
+  <div class="sheet">
+    <h2>Library</h2>
+    <p class="lead">Local Switch ROMs. Switch emulation isn't viable in-browser yet, but your files are stored and listed here.</p>
+    <div style="display:flex;gap:10px;margin-bottom:14px">
+      <button class="sbtn" id="sw-add">Add ROM(s)</button>
+      <input type="file" id="sw-input" multiple accept=".nsp,.xci" hidden>
+      <button class="sbtn ghost" data-close>Back</button>
+    </div>
+    <div id="sw-list"></div>
+  </div>
+</div>
+
+<!-- Settings modal -->
+<div id="settings-modal" class="modal">
+  <div class="sheet">
+    <h2>System Settings</h2>
+    <p class="lead">Local-only preferences.</p>
+    <div class="setrow"><span>Nickname</span><input type="text" id="sw-user"></div>
+    <div class="setrow"><span>Sound</span><div class="toggle on" id="sw-sound"></div></div>
+    <div class="setrow"><span>Version</span><span style="color:var(--faint);font-size:11px">retroboot Switch 1.0</span></div>
+    <div style="display:flex;gap:10px;margin-top:20px;justify-content:space-between">
+      <button class="sbtn" id="sw-export">Export this console as HTML</button>
+      <button class="sbtn ghost" data-close>Back</button>
+    </div>
+  </div>
+</div>
+
+<div class="emu-mount" id="emu-mount"></div>
+<button class="emu-close" id="emu-close" style="display:none">Stop</button>
+
+<script type="module" src="sw.js"></script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SNES Menu — retroboot</title>
+<link rel="stylesheet" href="snes.css">
+</head>
+<body>
+
+<div id="boot" class="boot">
+  <div>
+    <div class="plate">
+      <div class="brand">SUPER NINTENDO</div>
+      <div class="logo">SNES</div>
+      <div class="sub">Entertainment System</div>
+      <div class="buttons"><span></span><span></span><span></span><span></span></div>
+    </div>
+    <div class="press">PRESS START</div>
+  </div>
+</div>
+
+<div id="menu" class="menu">
+  <h1 class="title"><span class="b1">S</span><span class="b2">N</span><span class="b3">E</span><span class="b4">S</span> · Library</h1>
+  <div class="carts" id="carts"></div>
+  <div class="actions">
+    <button class="btn" id="library-btn">Library</button>
+    <button class="btn" id="settings-btn">Options</button>
+    <button class="btn" id="home-btn">Exit</button>
+  </div>
+</div>
+
+<div id="library-modal" class="modal">
+  <div class="sheet">
+    <h2>Library</h2>
+    <p class="lead">Add .smc / .sfc / .swc — stored locally.</p>
+    <div style="display:flex;gap:10px;margin-bottom:14px">
+      <button class="btn pri" id="lib-add">Add ROM</button>
+      <input type="file" id="lib-input" multiple accept=".smc,.sfc,.swc" hidden>
+      <button class="btn" data-close>Back</button>
+    </div>
+    <div id="lib-list"></div>
+  </div>
+</div>
+
+<div id="settings-modal" class="modal">
+  <div class="sheet">
+    <h2>Options</h2>
+    <p class="lead">retroboot SNES 1.0</p>
+    <div class="setrow"><span>Name</span><input type="text" id="snes-user"></div>
+    <div class="setrow"><span>Sound</span><div class="toggle on" id="snes-sound"></div></div>
+    <div style="display:flex;gap:10px;margin-top:20px;justify-content:space-between">
+      <button class="btn pri" id="snes-export">Export this console as HTML</button>
+      <button class="btn" data-close>Back</button>
+    </div>
+  </div>
+</div>
+
+<div class="emu-mount" id="emu-mount"></div>
+<button class="emu-close" id="emu-close" style="display:none">Stop</button>
+
+<script type="module" src="snes.js"></script>
+</body>
+</html>

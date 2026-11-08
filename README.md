@@ -1,4 +1,4 @@
-# retroboot
+# Nin64
 
 A fancy in-browser boot picker that lets you walk into stylised recreations of classic console home menus — **Wii, Wii U, Switch, GameCube, N64, NES, SNES** — and, when your machine is powerful enough, play your own ROMs inside them.
 

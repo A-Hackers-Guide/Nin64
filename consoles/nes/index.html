@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NES Menu — retroboot</title>
+<link rel="stylesheet" href="nes.css">
+</head>
+<body>
+
+<div id="boot" class="boot">
+  <div>
+    <div class="plate">
+      <div class="brand">NINTENDO</div>
+      <div class="logo">NES</div>
+      <div class="sub">Entertainment System · Local</div>
+    </div>
+    <div class="press">PRESS START</div>
+  </div>
+</div>
+
+<div id="menu" class="menu">
+  <div class="title">NES · GAMES</div>
+  <div class="carts" id="carts"></div>
+  <div class="actions">
+    <button class="btn" id="library-btn">LIBRARY</button>
+    <button class="btn" id="settings-btn">OPTIONS</button>
+    <button class="btn" id="home-btn">EXIT</button>
+  </div>
+</div>
+
+<div id="library-modal" class="modal">
+  <div class="sheet">
+    <h2>LIBRARY</h2>
+    <p class="lead">Add .nes / .fds files — local only.</p>
+    <div style="display:flex;gap:10px;margin-bottom:14px">
+      <button class="btn" id="lib-add">ADD ROM</button>
+      <input type="file" id="lib-input" multiple accept=".nes,.fds" hidden>
+      <button class="btn" data-close>BACK</button>
+    </div>
+    <div id="lib-list"></div>
+  </div>
+</div>
+
+<div id="settings-modal" class="modal">
+  <div class="sheet">
+    <h2>OPTIONS</h2>
+    <p class="lead">retroboot NES 1.0</p>
+    <div class="setrow"><span>NAME</span><input type="text" id="nes-user"></div>
+    <div class="setrow"><span>SOUND</span><div class="toggle on" id="nes-sound"></div></div>
+    <div style="display:flex;gap:10px;margin-top:20px;justify-content:space-between">
+      <button class="btn" id="nes-export">EXPORT HTML</button>
+      <button class="btn" data-close>BACK</button>
+    </div>
+  </div>
+</div>
+
+<div class="emu-mount" id="emu-mount"></div>
+<button class="emu-close" id="emu-close" style="display:none">Stop</button>
+
+<script type="module" src="nes.js"></script>
+</body>
+</html>

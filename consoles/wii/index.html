@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wii Menu — retroboot</title>
+<link rel="stylesheet" href="wii.css">
+</head>
+<body>
+
+<div class="clouds" id="clouds"></div>
+<div class="pointer" id="pointer"></div>
+
+<!-- Top ribbon -->
+<div class="ribbon">
+  <div class="wii-mark"><b>W</b>ii</div>
+  <div class="spacer"></div>
+  <div class="mii-parade">
+    <div class="mii" style="background:#fde68a">◕</div>
+    <div class="mii" style="background:#fca5a5">◉</div>
+    <div class="mii" style="background:#a7f3d0">◔</div>
+    <div class="mii" style="background:#bfdbfe">◑</div>
+  </div>
+</div>
+
+<!-- Channel grid -->
+<div class="grid">
+  <!-- Disc Channel (big) -->
+  <div class="chan disc" data-channel="disc">
+    <div class="art">
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <defs><radialGradient id="dg" cx="50%" cy="50%" r="50%">
+          <stop offset="40%" stop-color="#e2ecf7"/>
+          <stop offset="70%" stop-color="#9fc0e4"/>
+          <stop offset="100%" stop-color="#6a9cd0"/>
+        </radialGradient></defs>
+        <circle cx="50" cy="50" r="42" fill="url(#dg)" stroke="#8bb3dd" stroke-width="1"/>
+        <circle cx="50" cy="50" r="12" fill="#fff" stroke="#8bb3dd" stroke-width="1"/>
+        <circle cx="50" cy="50" r="5" fill="#cfd8e8"/>
+      </svg>
+    </div>
+    <div class="label">Disc Channel</div>
+  </div>
+
+  <!-- Mii -->
+  <div class="chan" data-channel="mii">
+    <div class="art">
+      <svg viewBox="0 0 100 100"><circle cx="50" cy="42" r="22" fill="#fff" stroke="#22304a" stroke-width="2"/><circle cx="42" cy="40" r="2.5" fill="#22304a"/><circle cx="58" cy="40" r="2.5" fill="#22304a"/><path d="M42 50 Q50 56 58 50" fill="none" stroke="#22304a" stroke-width="2" stroke-linecap="round"/><rect x="34" y="66" width="32" height="18" rx="4" fill="#4ea0ff"/></svg>
+    </div>
+    <div class="label">Mii Channel</div>
+  </div>
+
+  <!-- Photo -->
+  <div class="chan" data-channel="photo">
+    <div class="art">
+      <svg viewBox="0 0 100 100"><rect x="18" y="26" width="64" height="50" rx="4" fill="#fff" stroke="#22304a" stroke-width="2"/><circle cx="50" cy="52" r="14" fill="none" stroke="#22304a" stroke-width="2"/><circle cx="50" cy="52" r="7" fill="#4ea0ff"/><rect x="60" y="32" width="12" height="6" rx="1" fill="#fca5a5"/></svg>
+    </div>
+    <div class="label">Photo Channel</div>
+  </div>
+
+  <!-- Shop -->
+  <div class="chan" data-channel="shop">
+    <div class="art">
+      <svg viewBox="0 0 100 100"><rect x="22" y="38" width="56" height="42" fill="#fde68a" stroke="#22304a" stroke-width="2"/><path d="M22 38 L30 22 L70 22 L78 38 Z" fill="#fca5a5" stroke="#22304a" stroke-width="2"/><rect x="42" y="56" width="16" height="24" fill="#fff" stroke="#22304a" stroke-width="2"/></svg>
+    </div>
+    <div class="label">Shop Channel</div>
+  </div>
+
+  <!-- Internet (row 2) -->
+  <div class="chan" data-channel="internet">
+    <div class="art">
+      <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="28" fill="#4ea0ff" stroke="#22304a" stroke-width="2"/><ellipse cx="50" cy="50" rx="28" ry="12" fill="none" stroke="#fff" stroke-width="1.5"/><path d="M22 50 L78 50" stroke="#fff" stroke-width="1.5"/><path d="M50 22 Q35 50 50 78" fill="none" stroke="#fff" stroke-width="1.5"/><path d="M50 22 Q65 50 50 78" fill="none" stroke="#fff" stroke-width="1.5"/></svg>
+    </div>
+    <div class="label">Internet Channel</div>
+  </div>
+
+  <!-- News -->
+  <div class="chan" data-channel="news">
+    <div class="art">
+      <svg viewBox="0 0 100 100"><rect x="20" y="26" width="60" height="48" fill="#fff" stroke="#22304a" stroke-width="2"/><rect x="24" y="30" width="52" height="8" fill="#22304a"/><rect x="24" y="42" width="24" height="20" fill="#e2ecf7"/><rect x="52" y="42" width="24" height="3" fill="#6a7a94"/><rect x="52" y="48" width="24" height="3" fill="#6a7a94"/><rect x="52" y="54" width="20" height="3" fill="#6a7a94"/><rect x="24" y="66" width="52" height="3" fill="#6a7a94"/></svg>
+    </div>
+    <div class="label">News Channel</div>
+  </div>
+
+  <!-- Weather -->
+  <div class="chan" data-channel="weather">
+    <div class="art">
+      <svg viewBox="0 0 100 100"><circle cx="38" cy="38" r="14" fill="#fde047"/><ellipse cx="60" cy="56" rx="22" ry="11" fill="#fff" stroke="#22304a" stroke-width="2"/><line x1="46" y1="72" x2="42" y2="82" stroke="#4ea0ff" stroke-width="2" stroke-linecap="round"/><line x1="56" y1="72" x2="52" y2="82" stroke="#4ea0ff" stroke-width="2" stroke-linecap="round"/><line x1="66" y1="72" x2="62" y2="82" stroke="#4ea0ff" stroke-width="2" stroke-linecap="round"/></svg>
+    </div>
+    <div class="label">Weather Channel</div>
+  </div>
+
+  <!-- Votes (row 3) -->
+  <div class="chan" data-channel="votes">
+    <div class="art">
+      <svg viewBox="0 0 100 100"><rect x="20" y="40" width="22" height="40" fill="#f87171" stroke="#22304a" stroke-width="2"/><rect x="42" y="30" width="22" height="50" fill="#60a5fa" stroke="#22304a" stroke-width="2"/><rect x="64" y="50" width="16" height="30" fill="#34d399" stroke="#22304a" stroke-width="2"/></svg>
+    </div>
+    <div class="label">Everybody Votes</div>
+  </div>
+
+  <!-- CheckMii -->
+  <div class="chan" data-channel="checkmii">
+    <div class="art">
+      <svg viewBox="0 0 100 100"><circle cx="34" cy="50" r="14" fill="#fff" stroke="#22304a" stroke-width="2"/><circle cx="66" cy="50" r="14" fill="#fff" stroke="#22304a" stroke-width="2"/><path d="M28 72 Q50 82 72 72" fill="none" stroke="#22304a" stroke-width="2"/></svg>
+    </div>
+    <div class="label">Check Mii Out</div>
+  </div>
+
+  <!-- Games (ROM library) -->
+  <div class="chan" data-channel="games">
+    <div class="art">
+      <svg viewBox="0 0 100 100"><rect x="22" y="36" width="56" height="34" rx="6" fill="#4ea0ff" stroke="#22304a" stroke-width="2"/><circle cx="36" cy="53" r="4" fill="#fff"/><circle cx="64" cy="53" r="4" fill="#fde047"/><circle cx="66" cy="47" r="2" fill="#fde047"/><circle cx="66" cy="59" r="2" fill="#fde047"/><rect x="34" y="46" width="2" height="14" fill="#fff"/><rect x="29" y="51" width="12" height="2" fill="#fff"/></svg>
+    </div>
+    <div class="label">Games</div>
+  </div>
+
+  <!-- Settings -->
+  <div class="chan" data-channel="settings">
+    <div class="art">
+      <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="22" fill="none" stroke="#22304a" stroke-width="4"/><circle cx="50" cy="50" r="6" fill="#22304a"/><g transform="translate(50 50)"><rect x="-3" y="-30" width="6" height="8" fill="#22304a"/><rect x="-3" y="22" width="6" height="8" fill="#22304a"/><rect x="-30" y="-3" width="8" height="6" fill="#22304a"/><rect x="22" y="-3" width="8" height="6" fill="#22304a"/></g></svg>
+    </div>
+    <div class="label">Wii Settings</div>
+  </div>
+
+</div>
+
+<!-- Bottom nav -->
+<div class="nav">
+  <div class="left">
+    <div class="nav-btn" id="mail-btn">Wii Message Board</div>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+    <div class="nav-btn big" id="home-btn">Wii</div>
+    <div class="clock">
+      <span id="clock-h">--:--</span>
+      <small id="clock-d">—</small>
+    </div>
+  </div>
+  <div class="right">
+    <div class="nav-btn" id="games-btn">Disc</div>
+  </div>
+</div>
+
+<!-- Overlays -->
+<div class="overlay" id="ch-settings">
+  <div class="sheet">
+    <h2>Wii Settings</h2>
+    <p class="lead">Local-only. These stick to this browser.</p>
+    <div class="settings-row"><span>User Name</span><input type="text" id="user-name" maxlength="10"></div>
+    <div class="settings-row"><span>Sound</span><div class="toggle on" id="sound-toggle"></div></div>
+    <div class="settings-row"><span>System</span><span style="font-size:11px;color:#6a7a94">retroboot · Wii Menu v1</span></div>
+    <div style="margin-top:20px;display:flex;justify-content:space-between;align-items:center">
+      <a href="#" class="wbtn primary" id="export-btn">Export this console as HTML</a>
+      <button class="wbtn" data-close>Back</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="ch-games">
+  <div class="sheet">
+    <h2>Games</h2>
+    <p class="lead">Your Wii / GameCube ROM library. Nothing uploads anywhere.</p>
+    <div style="display:flex;gap:10px;margin-bottom:10px">
+      <button class="wbtn" id="games-drop">Add ROM(s)</button>
+      <input type="file" id="games-input" multiple accept=".iso,.gcm,.gcz,.wbfs,.wad" hidden>
+      <button class="wbtn" data-close>Back</button>
+    </div>
+    <div class="rom-list" id="games-list"></div>
+  </div>
+</div>
+
+<div class="overlay" id="ch-disc">
+  <div class="sheet">
+    <h2>Disc Channel</h2>
+    <p class="lead">Insert a disc to play.</p>
+    <p style="color:#6a7a94;font-size:13px">In retroboot, the "disc" is any ROM in your library. Open the <b>Games</b> channel to browse and play Wii / GameCube titles.</p>
+    <button class="wbtn primary" data-close>Back</button>
+  </div>
+</div>
+
+<div class="overlay" id="ch-mii">
+  <div class="sheet">
+    <h2>Mii Channel</h2>
+    <p class="lead">Create and dress up the little people who live in your Wii.</p>
+    <p style="color:#6a7a94;font-size:13px">The real Mii Channel is a whole editor. This tribute shows the parade in the top ribbon.</p>
+    <button class="wbtn primary" data-close>Back</button>
+  </div>
+</div>
+
+<div class="overlay" id="ch-photo"><div class="sheet"><h2>Photo Channel</h2><p class="lead">View, decorate, and send photos.</p><p style="color:#6a7a94;font-size:13px">A placeholder for the fan-recreation.</p><button class="wbtn primary" data-close>Back</button></div></div>
+
+<div class="overlay" id="ch-shop"><div class="sheet"><h2>Shop Channel</h2><p class="lead">The Shop closed in 2019. This is a memorial.</p><p style="color:#6a7a94;font-size:13px">Virtual Console / WiiWare browsing lived here.</p><button class="wbtn primary" data-close>Back</button></div></div>
+
+<div class="overlay" id="ch-internet"><div class="sheet"><h2>Internet Channel</h2><p class="lead">A pared-down Opera browser.</p><button class="wbtn" data-close>Back</button> <a class="wbtn primary" href="https://duckduckgo.com" target="_blank">Open a browser</a></div></div>
+
+<div class="overlay" id="ch-news"><div class="sheet"><h2>News Channel</h2><p class="lead">Headlines on a spinning globe.</p><button class="wbtn primary" data-close>Back</button></div></div>
+
+<div class="overlay" id="ch-weather"><div class="sheet"><h2>Forecast Channel</h2><p class="lead">A sunny day, every day.</p><button class="wbtn primary" data-close>Back</button></div></div>
+
+<div class="overlay" id="ch-votes"><div class="sheet"><h2>Everybody Votes Channel</h2><p class="lead">Polls that already closed, forever.</p><button class="wbtn primary" data-close>Back</button></div></div>
+
+<div class="overlay" id="ch-checkmii"><div class="sheet"><h2>Check Mii Out Channel</h2><p class="lead">A gallery of the world's Miis.</p><button class="wbtn primary" data-close>Back</button></div></div>
+
+<div class="overlay" id="ch-credits"><div class="sheet"><h2>Credits</h2><p class="lead">Fan tribute — no official code or art.</p><button class="wbtn primary" data-close>Back</button></div></div>
+
+<div class="overlay" id="ch-generic"><div class="sheet"><h2>Channel</h2><button class="wbtn primary" data-close>Back</button></div></div>
+
+<!-- Emulator mount & boot curtain -->
+<div class="emu-mount" id="emu-mount"></div>
+<button class="emu-close" id="emu-close" style="display:none">Stop</button>
+<div class="curtain" id="curtain"></div>
+
+<script>
+  // Show emu-close only when emulator is on
+  new MutationObserver(() => {
+    const on = document.getElementById('emu-mount').classList.contains('on');
+    document.getElementById('emu-close').style.display = on ? '' : 'none';
+  }).observe(document.getElementById('emu-mount'), { attributes: true, attributeFilter: ['class'] });
+</script>
+<script type="module" src="wii.js"></script>
+</body>
+</html>

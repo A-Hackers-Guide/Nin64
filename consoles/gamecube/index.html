@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GameCube Menu — retroboot</title>
+<link rel="stylesheet" href="gc.css">
+</head>
+<body>
+
+<!-- Boot cube -->
+<div id="boot-stage" class="boot-stage">
+  <div class="scene">
+    <div class="cube-wrap">
+      <div class="cube">
+        <div class="face f1"><div class="glyph"></div></div>
+        <div class="face f2"><div class="glyph"></div></div>
+        <div class="face f3"><div class="glyph"></div></div>
+        <div class="face f4"><div class="glyph"></div></div>
+        <div class="face f5"><div class="glyph"></div></div>
+        <div class="face f6"><div class="glyph"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="boot-text">GAMECUBE</div>
+</div>
+
+<!-- Main menu -->
+<div id="menu" class="menu">
+
+  <div class="mb-top">
+    <div class="brand">GAMECUBE</div>
+    <div class="time" id="clock">--:--</div>
+    <div class="actions">
+      <button class="gbtn" id="open-games">Games</button>
+      <button class="gbtn" id="open-settings">Options</button>
+      <button class="gbtn" id="home-btn">Back</button>
+    </div>
+  </div>
+
+  <div class="lanes">
+    <div class="disc-area" id="disc-area">
+      <div class="disc-art"></div>
+      <div>
+        <div style="font-size:11px;letter-spacing:0.3em;color:var(--faint);text-transform:uppercase;margin-bottom:4px">Disc</div>
+        <h3 style="margin:0;font-size:24px">— No Disc —</h3>
+        <p style="margin:6px 0 0;color:var(--faint);font-size:13px">Click to open the Games library instead.</p>
+      </div>
+      <div style="font-size:11px;letter-spacing:0.3em;color:var(--faint);text-transform:uppercase">Boot&nbsp;→</div>
+    </div>
+
+    <div class="lane" id="lane-a">
+      <span class="slot-no">Slot A</span>
+      <h3>Memory Card</h3>
+      <div class="status">Local ROM library</div>
+      <div class="count" id="slot-a-count">0</div>
+      <div style="font-size:11px;letter-spacing:0.2em;color:var(--faint);text-transform:uppercase">Titles</div>
+    </div>
+    <div class="lane" id="lane-b">
+      <span class="slot-no">Slot B</span>
+      <h3>Memory Card</h3>
+      <div class="status">Empty</div>
+      <div class="count" id="slot-b-count">0</div>
+      <div style="font-size:11px;letter-spacing:0.2em;color:var(--faint);text-transform:uppercase">Titles</div>
+    </div>
+  </div>
+
+  <div class="mb-bot">
+    <small style="color:var(--faint);font-size:11px;letter-spacing:0.3em;text-transform:uppercase">A fan tribute · No official firmware</small>
+  </div>
+</div>
+
+<!-- Games modal -->
+<div id="games-modal" class="modal">
+  <div class="sheet">
+    <h2>Games</h2>
+    <p class="lead">GameCube ROMs in your local library. Nothing uploads.</p>
+    <div style="display:flex;gap:10px;margin-bottom:14px">
+      <button class="gbtn primary" id="games-add">Add ROM(s)</button>
+      <input type="file" id="games-input" multiple accept=".iso,.gcm,.gcz" hidden>
+      <button class="gbtn" data-close>Back</button>
+    </div>
+    <div id="games-list"></div>
+  </div>
+</div>
+
+<!-- Settings modal -->
+<div id="settings-modal" class="modal">
+  <div class="sheet">
+    <h2>Options</h2>
+    <p class="lead">Local-only preferences. Stored in this browser.</p>
+    <div class="setrow"><span>User name</span><input type="text" id="gc-user"></div>
+    <div class="setrow"><span>Sound</span><div class="toggle on" id="gc-sound"></div></div>
+    <div class="setrow"><span>System</span><span style="color:var(--faint);font-size:11px">retroboot · GameCube v1</span></div>
+    <div style="display:flex;gap:10px;margin-top:20px;justify-content:space-between">
+      <button class="gbtn primary" id="gc-export">Export this console as HTML</button>
+      <button class="gbtn" data-close>Back</button>
+    </div>
+  </div>
+</div>
+
+<div class="emu-mount" id="emu-mount"></div>
+<button class="emu-close" id="emu-close" style="display:none">Stop</button>
+
+<script type="module" src="gc.js"></script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wii U Menu — retroboot</title>
+<link rel="stylesheet" href="wu.css">
+</head>
+<body>
+
+<div id="boot" class="boot"><div class="mark">Wii U</div></div>
+
+<div class="topbar">
+  <div class="user">
+    <div class="avatar"></div>
+    <div><div class="user-name">Player</div><div class="user-sub">Local account</div></div>
+  </div>
+  <div class="spaces">
+    <div class="space on">Wii U Menu</div>
+    <div class="space">Daily Log</div>
+    <div class="space">Activity</div>
+  </div>
+  <div class="time" id="clock">--:--</div>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<div class="botbar">
+  <span>Local-only · nothing uploads</span>
+  <button class="btn ghost" id="back-btn">Back to boot picker</button>
+</div>
+
+<div id="library-modal" class="modal">
+  <div class="sheet">
+    <h2>Library</h2>
+    <p class="lead">Add Wii U ROM files. Stored locally.</p>
+    <div style="display:flex;gap:10px;margin-bottom:14px">
+      <button class="btn" id="wu-add">Add ROM(s)</button>
+      <input type="file" id="wu-input" multiple accept=".wud,.wux" hidden>
+      <button class="btn ghost" data-close>Back</button>
+    </div>
+    <div id="wu-list"></div>
+  </div>
+</div>
+
+<div id="settings-modal" class="modal">
+  <div class="sheet">
+    <h2>System Settings</h2>
+    <p class="lead">Local, stored in this browser.</p>
+    <div class="setrow"><span>Nickname</span><input type="text" id="wu-user"></div>
+    <div class="setrow"><span>Sound</span><div class="toggle on" id="wu-sound"></div></div>
+    <div class="setrow"><span>Version</span><span style="color:#64748b;font-size:11px">retroboot Wii U 1.0</span></div>
+    <div style="display:flex;gap:10px;margin-top:20px;justify-content:space-between">
+      <button class="btn" id="wu-export">Export this console as HTML</button>
+      <button class="btn ghost" data-close>Back</button>
+    </div>
+  </div>
+</div>
+
+<div id="generic-modal" class="modal">
+  <div class="sheet">
+    <h2 id="generic-title">App</h2>
+    <p class="lead">This is a placeholder for the fan-recreation of this app.</p>
+    <button class="btn" data-close>Back</button>
+  </div>
+</div>
+
+<div class="emu-mount" id="emu-mount"></div>
+<button class="emu-close" id="emu-close" style="display:none">Stop</button>
+
+<script type="module" src="wu.js"></script>
+</body>
+</html>

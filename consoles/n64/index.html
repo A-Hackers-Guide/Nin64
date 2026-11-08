@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>N64 Menu — retroboot</title>
+<link rel="stylesheet" href="n64.css">
+</head>
+<body>
+
+<div id="boot" class="boot">
+  <div class="logo">
+    <div class="q"></div><div class="q"></div>
+    <div class="q"></div><div class="q"></div>
+  </div>
+  <div class="label">NINTENDO&nbsp;64</div>
+</div>
+
+<div id="menu" class="menu">
+  <div class="title">SELECT GAME</div>
+  <div class="carts" id="carts"></div>
+  <div class="actions">
+    <button class="btn" id="library-btn">LIBRARY</button>
+    <button class="btn" id="settings-btn">OPTIONS</button>
+    <button class="btn" id="home-btn">EXIT</button>
+  </div>
+</div>
+
+<div id="library-modal" class="modal">
+  <div class="sheet">
+    <h2>LIBRARY</h2>
+    <p class="lead">N64 ROMs (.n64 .z64 .v64) — stored locally</p>
+    <div style="display:flex;gap:10px;margin-bottom:14px">
+      <button class="btn" id="lib-add">ADD ROM</button>
+      <input type="file" id="lib-input" multiple accept=".n64,.z64,.v64" hidden>
+      <button class="btn" data-close>BACK</button>
+    </div>
+    <div id="lib-list"></div>
+  </div>
+</div>
+
+<div id="settings-modal" class="modal">
+  <div class="sheet">
+    <h2>OPTIONS</h2>
+    <p class="lead">retroboot N64 1.0</p>
+    <div class="setrow"><span>PLAYER</span><input type="text" id="n64-user"></div>
+    <div class="setrow"><span>SOUND</span><div class="toggle on" id="n64-sound"></div></div>
+    <div style="display:flex;gap:10px;margin-top:20px;justify-content:space-between">
+      <button class="btn" id="n64-export">EXPORT HTML</button>
+      <button class="btn" data-close>BACK</button>
+    </div>
+  </div>
+</div>
+
+<div class="emu-mount" id="emu-mount"></div>
+<button class="emu-close" id="emu-close" style="display:none">Stop</button>
+
+<script type="module" src="n64.js"></script>
+</body>
+</html>

@@ -122,16 +122,18 @@ header.topbar {
   font-weight: 900;
   font-size: clamp(28px, 4vw, 56px);
   letter-spacing: 0.08em;
-  background: linear-gradient(180deg, #fff 0%, #cbd5ff 50%, #8aa0e6 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  margin: 0;
   filter: drop-shadow(0 4px 24px rgba(96,165,250,0.35));
   animation: titleIn 1.4s cubic-bezier(.2,.9,.3,1.1) both;
 }
 .title .glyph {
   display: inline-block;
   animation: glyphFloat 6s ease-in-out infinite;
+  background-image: linear-gradient(180deg, #ffffff 0%, #cbd5ff 55%, #8aa0e6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 .title .glyph:nth-child(2n) { animation-delay: 0.4s; }
 .title .glyph:nth-child(3n) { animation-delay: 0.8s; }

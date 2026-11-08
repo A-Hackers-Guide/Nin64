@@ -246,11 +246,14 @@ function openSettings() {
         jsUrls: [],
         jsModules: [
           'wii.js',
+          'mii.js',
           '../../assets/js/sound.js',
           '../../assets/js/roms.js',
           '../../assets/js/emulator.js',
           '../../assets/js/export.js',
           '../../assets/js/features.js',
+          '../../assets/js/storage.js',
+          '../../assets/js/art.js',
         ],
       });
       play('wii', 'select');

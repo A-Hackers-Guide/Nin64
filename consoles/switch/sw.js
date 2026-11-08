@@ -3,6 +3,7 @@ import { listRoms, addRom, removeRom, formatBytes, classifyFile } from '../../as
 import { runRom, canEmulate } from '../../assets/js/emulator.js';
 import { exportConsole } from '../../assets/js/export.js';
 import { autoAttach } from '../../assets/js/features.js';
+import { boxArt, boxTile } from '../../assets/js/art.js';
 autoAttach('switch');
 
 const AUDIO = { on: true };
@@ -46,10 +47,7 @@ async function buildTiles() {
     roms.forEach(r => {
       const t = document.createElement('div');
       t.className = 'tile';
-      t.innerHTML = `<div class="art">
-          <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="30" fill="#fff" fill-opacity="0.8"/>
-          <polygon points="42,36 42,64 66,50" fill="#004d8a"/></svg>
-        </div>
+      t.innerHTML = `<div class="art" style="background:transparent;padding:0;overflow:hidden">${boxArt(r, { w: 320, h: 320 })}</div>
         <div class="name">${r.name.length > 24 ? r.name.slice(0, 22)+'…' : r.name}</div>
         <div class="sub">${formatBytes(r.size)}</div>`;
       t.onmouseenter = () => AUDIO.on && play('switch','hover');
@@ -141,7 +139,7 @@ function openSettings() {
         title: 'Switch Home — Standalone',
         htmlUrl: 'index.html',
         cssUrls: ['sw.css'],
-        jsModules: ['sw.js','../../assets/js/sound.js','../../assets/js/roms.js','../../assets/js/emulator.js','../../assets/js/export.js','../../assets/js/features.js'],
+        jsModules: ['sw.js','../../assets/js/sound.js','../../assets/js/roms.js','../../assets/js/emulator.js','../../assets/js/export.js','../../assets/js/features.js','../../assets/js/art.js','../../assets/js/storage.js'],
       });
       play('switch','select');
     } catch(e) { alert('Export failed: '+e.message); }

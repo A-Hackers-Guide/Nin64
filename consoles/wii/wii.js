@@ -3,6 +3,8 @@ import { listRoms, addRom, removeRom, formatBytes, classifyFile } from '../../as
 import { runRom, canEmulate } from '../../assets/js/emulator.js';
 import { exportConsole } from '../../assets/js/export.js';
 import { autoAttach } from '../../assets/js/features.js';
+import { boxTile } from '../../assets/js/art.js';
+import { miiSvg, listMiis, saveMii, removeMii, DEFAULT as MII_DEFAULT, SKINS, HAIRS } from './mii.js';
 autoAttach('wii');
 
 /* Pointer */
@@ -30,6 +32,25 @@ document.addEventListener('pointerdown', function once() {
   try { audioCtx(); } catch {}
   document.removeEventListener('pointerdown', once);
 }, { once: true });
+
+/* Mii parade — populate from saved Miis, fall back to defaults */
+function paintMiiParade() {
+  const parade = document.getElementById('mii-parade');
+  if (!parade) return;
+  let miis = listMiis();
+  if (miis.length === 0) {
+    miis = [
+      { skin: '#f5d4b3', hair: 'short', hairC: '#3a2a1a', eye: 'dot',  mouth: 'smile' },
+      { skin: '#e8b28f', hair: 'long',  hairC: '#d94747', eye: 'oval', mouth: 'grin' },
+      { skin: '#8d5a2e', hair: 'short', hairC: '#2a1a0a', eye: 'dot',  mouth: 'smile' },
+      { skin: '#f8e3c7', hair: 'spike', hairC: '#c9a267', eye: 'line', mouth: 'grin' },
+    ];
+  }
+  parade.innerHTML = miis.slice(0, 6).map((m, i) =>
+    `<div class="mii" style="padding:0;background:#fff;animation-delay:${i * 0.2}s">${miiSvg(m, { size: 40 })}</div>`
+  ).join('');
+}
+paintMiiParade();
 
 /* Clouds */
 (function makeClouds() {
@@ -67,8 +88,9 @@ document.querySelectorAll('[data-close]').forEach(el => el.addEventListener('cli
 async function openChannel(name) {
   switch (name) {
     case 'settings': openSettings(); break;
+    case 'mii':      openMiiStudio(); break;
+    case 'games':    openGames();     break;
     case 'disc':
-    case 'mii':
     case 'photo':
     case 'internet':
     case 'shop':
@@ -79,11 +101,126 @@ async function openChannel(name) {
     case 'credits':
       openOverlay(`ch-${name}`);
       break;
-    case 'games': openGames(); break;
     default:
       openOverlay('ch-generic');
   }
 }
+
+/* ---------- Mii Studio ---------- */
+
+let currentMii = { ...MII_DEFAULT };
+
+function openMiiStudio() {
+  openOverlay('ch-mii');
+  const sheet = document.querySelector('#ch-mii .sheet');
+  sheet.innerHTML = `
+    <h2>Mii Channel</h2>
+    <p class="lead">Build a Mii, and they'll walk the top ribbon forever.</p>
+    <div class="mii-studio">
+      <div class="mii-canvas" id="mii-preview"></div>
+      <div class="mii-controls">
+        <div class="mii-row"><label>Face</label><div class="options" data-key="face">
+          ${['round','oval','square'].map(v => `<button class="opt" data-v="${v}">${v}</button>`).join('')}
+        </div></div>
+        <div class="mii-row"><label>Skin</label><div class="swatches" data-key="skin">
+          ${SKINS.map(c => `<button class="swatch" data-v="${c}" style="background:${c}"></button>`).join('')}
+        </div></div>
+        <div class="mii-row"><label>Hair</label><div class="options" data-key="hair">
+          ${['short','long','spike','bald'].map(v => `<button class="opt" data-v="${v}">${v}</button>`).join('')}
+        </div></div>
+        <div class="mii-row"><label>Hair color</label><div class="swatches" data-key="hairC">
+          ${HAIRS.map(c => `<button class="swatch" data-v="${c}" style="background:${c}"></button>`).join('')}
+        </div></div>
+        <div class="mii-row"><label>Eyes</label><div class="options" data-key="eye">
+          ${['dot','oval','line'].map(v => `<button class="opt" data-v="${v}">${v}</button>`).join('')}
+        </div></div>
+        <div class="mii-row"><label>Mouth</label><div class="options" data-key="mouth">
+          ${['smile','grin','line','frown'].map(v => `<button class="opt" data-v="${v}">${v}</button>`).join('')}
+        </div></div>
+        <div class="mii-row"><label>Name</label>
+          <input type="text" id="mii-name" value="${currentMii.name}" maxlength="10"
+                 style="padding:6px 10px;border-radius:999px;border:1px solid var(--chip-stroke);font-family:inherit;font-size:13px"></div>
+      </div>
+    </div>
+    <div class="mii-saved">
+      <h3>Saved Miis</h3>
+      <div class="mii-row-saved" id="mii-saved"></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px;justify-content:space-between">
+      <div style="display:flex;gap:10px">
+        <button class="wbtn primary" id="mii-save">Save Mii</button>
+        <button class="wbtn" id="mii-reset">Randomize</button>
+      </div>
+      <button class="wbtn" data-close>Back</button>
+    </div>
+  `;
+
+  // Wire controls
+  sheet.querySelectorAll('[data-key]').forEach(group => {
+    const key = group.dataset.key;
+    group.querySelectorAll('[data-v]').forEach(btn => {
+      btn.onclick = () => {
+        currentMii[key] = btn.dataset.v;
+        markOn(group, btn);
+        if (audioEnabled) play('wii', 'select');
+        redrawMii();
+      };
+    });
+    markOn(group, group.querySelector(`[data-v="${currentMii[key]}"]`));
+  });
+
+  sheet.querySelector('#mii-name').oninput = e => { currentMii.name = e.target.value; };
+
+  sheet.querySelector('#mii-save').onclick = () => {
+    saveMii(currentMii);
+    play('wii', 'select');
+    paintMiiParade();
+    refreshSavedMiis();
+  };
+  sheet.querySelector('#mii-reset').onclick = () => {
+    currentMii.face  = pick(['round','oval','square']);
+    currentMii.skin  = pick(SKINS);
+    currentMii.hair  = pick(['short','long','spike','bald']);
+    currentMii.hairC = pick(HAIRS);
+    currentMii.eye   = pick(['dot','oval','line']);
+    currentMii.mouth = pick(['smile','grin','line','frown']);
+    play('wii', 'hover');
+    openMiiStudio(); // re-render UI with new selections
+  };
+  sheet.querySelectorAll('[data-close]').forEach(el => el.onclick = closeOverlays);
+
+  redrawMii();
+  refreshSavedMiis();
+}
+
+function markOn(group, btn) {
+  if (!btn) return;
+  group.querySelectorAll('[data-v]').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+}
+function redrawMii() {
+  const p = document.getElementById('mii-preview');
+  if (p) p.innerHTML = miiSvg(currentMii, { size: 180 });
+}
+function refreshSavedMiis() {
+  const el = document.getElementById('mii-saved');
+  if (!el) return;
+  const miis = listMiis();
+  if (!miis.length) { el.innerHTML = '<span style="color:#6a7a94;font-size:12px">No Miis yet. Make one above.</span>'; return; }
+  el.innerHTML = miis.map(m => `
+    <div class="mii-mini" title="${m.name || 'Mii'}" data-id="${m.id}">
+      ${miiSvg(m, { size: 36 })}
+      <button class="x" data-del="${m.id}">✕</button>
+    </div>`).join('');
+  el.querySelectorAll('[data-del]').forEach(b => b.onclick = e => {
+    e.stopPropagation();
+    removeMii(+e.target.dataset.del);
+    play('wii', 'back');
+    refreshSavedMiis();
+    paintMiiParade();
+  });
+}
+function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
 /* Settings — includes "Export this console as HTML" */
 function openSettings() {

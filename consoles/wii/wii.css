@@ -367,6 +367,100 @@ html, body {
   border: 0;
 }
 
+/* Mii Channel */
+.mii-studio {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 20px;
+  align-items: start;
+}
+.mii-canvas {
+  background: linear-gradient(180deg, #e9f1fa, #d1e2f3);
+  border: 1px solid var(--chip-stroke);
+  border-radius: 14px;
+  padding: 20px;
+  display: grid;
+  place-items: center;
+  min-height: 240px;
+}
+.mii-canvas svg { width: 180px; height: 180px; }
+.mii-controls {
+  display: grid;
+  gap: 10px;
+}
+.mii-row { display: grid; grid-template-columns: 70px 1fr; gap: 10px; align-items: center; font-size: 12px; }
+.mii-row label { color: var(--ink); font-weight: 600; letter-spacing: 0.04em; }
+.swatches { display: flex; gap: 6px; flex-wrap: wrap; }
+.swatch {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 2px solid rgba(0,0,0,0.1);
+  cursor: none;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+.swatch.on { border-color: var(--accent); transform: scale(1.15); box-shadow: 0 0 0 3px rgba(78,160,255,0.2); }
+.options { display: flex; gap: 4px; flex-wrap: wrap; }
+.opt {
+  padding: 6px 10px;
+  border: 1px solid var(--chip-stroke);
+  border-radius: 999px;
+  background: #fff;
+  font-size: 11px;
+  cursor: none;
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+.opt.on { background: var(--accent); color: #fff; border-color: var(--accent); }
+.opt:hover { box-shadow: 0 0 0 2px rgba(78,160,255,0.2); }
+
+.mii-saved {
+  margin-top: 16px;
+  padding: 14px;
+  background: #fafdff;
+  border: 1px solid var(--chip-stroke);
+  border-radius: 10px;
+}
+.mii-saved h3 { margin: 0 0 8px; font-size: 13px; }
+.mii-row-saved { display: flex; gap: 8px; flex-wrap: wrap; }
+.mii-mini {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: #fff; border: 1px solid var(--chip-stroke);
+  display: grid; place-items: center;
+  position: relative;
+  cursor: none;
+}
+.mii-mini svg { width: 36px; height: 36px; }
+.mii-mini .x {
+  position: absolute; top: -6px; right: -6px;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: #dc2626; color: #fff; font-size: 10px;
+  display: grid; place-items: center; cursor: none;
+  opacity: 0; transition: opacity 0.15s ease;
+}
+.mii-mini:hover .x { opacity: 1; }
+
+/* GameCube Memory Card viewer */
+.memcard {
+  background: linear-gradient(140deg, #c9dcf0, #8aa0e6);
+  border-radius: 10px;
+  padding: 16px;
+  color: #22304a;
+}
+.memcard h3 { margin: 0 0 8px; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; }
+.blocks { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; margin-top: 10px; }
+.block {
+  aspect-ratio: 1;
+  background: rgba(255,255,255,0.3);
+  border: 1px solid rgba(34,48,74,0.2);
+  border-radius: 3px;
+  display: grid;
+  place-items: center;
+  font-size: 10px;
+  font-weight: 700;
+}
+.block.used { background: #22304a; color: #fff; }
+.block.free { opacity: 0.4; }
+.memcard .meta { font-size: 11px; color: #22304a; margin-top: 10px; display: flex; justify-content: space-between; }
+
 /* Boot curtain */
 .curtain {
   position: fixed; inset: 0;

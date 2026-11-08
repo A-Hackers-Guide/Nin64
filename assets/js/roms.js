@@ -50,7 +50,7 @@ export async function addRom(file) {
   if (!meta) throw new Error(`Unrecognized ROM extension: ${file.name}`);
   const blob = await file.arrayBuffer();
   const db = await openDb();
-  return new Promise((resolve, reject) => {
+  const id = await new Promise((resolve, reject) => {
     const tx = db.transaction(STORE, 'readwrite');
     const req = tx.objectStore(STORE).add({
       name: file.name,
@@ -63,6 +63,11 @@ export async function addRom(file) {
     req.onsuccess = () => resolve(req.result);
     req.onerror = () => reject(req.error);
   });
+  try {
+    const total = (await listRoms(meta.console)).length;
+    window.dispatchEvent(new CustomEvent('rom:added', { detail: { console: meta.console, total } }));
+  } catch {}
+  return id;
 }
 
 export async function listRoms(consoleKey = null) {

@@ -2,6 +2,8 @@ import { play, ctx as audioCtx } from '../../assets/js/sound.js';
 import { listRoms, addRom, removeRom, formatBytes, classifyFile } from '../../assets/js/roms.js';
 import { runRom, canEmulate } from '../../assets/js/emulator.js';
 import { exportConsole } from '../../assets/js/export.js';
+import { autoAttach } from '../../assets/js/features.js';
+autoAttach('wii');
 
 /* Pointer */
 const pointer = document.getElementById('pointer');
@@ -111,6 +113,7 @@ function openSettings() {
           '../../assets/js/roms.js',
           '../../assets/js/emulator.js',
           '../../assets/js/export.js',
+          '../../assets/js/features.js',
         ],
       });
       play('wii', 'select');

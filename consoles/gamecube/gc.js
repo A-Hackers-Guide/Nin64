@@ -2,6 +2,8 @@ import { play, ctx as audioCtx } from '../../assets/js/sound.js';
 import { listRoms, addRom, removeRom, formatBytes, classifyFile } from '../../assets/js/roms.js';
 import { runRom } from '../../assets/js/emulator.js';
 import { exportConsole } from '../../assets/js/export.js';
+import { autoAttach } from '../../assets/js/features.js';
+autoAttach('gamecube');
 
 const AUDIO = { on: true };
 document.addEventListener('pointerdown', function once() {
@@ -131,7 +133,7 @@ function openSettings() {
         title: 'GameCube Menu — Standalone',
         htmlUrl: 'index.html',
         cssUrls: ['gc.css'],
-        jsModules: ['gc.js', '../../assets/js/sound.js', '../../assets/js/roms.js', '../../assets/js/emulator.js', '../../assets/js/export.js'],
+        jsModules: ['gc.js', '../../assets/js/sound.js', '../../assets/js/roms.js', '../../assets/js/emulator.js', '../../assets/js/export.js', '../../assets/js/features.js'],
       });
       play('gamecube','select');
     } catch (e) { alert('Export failed: ' + e.message); }

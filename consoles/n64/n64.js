@@ -2,6 +2,8 @@ import { play, ctx as audioCtx } from '../../assets/js/sound.js';
 import { listRoms, addRom, removeRom, formatBytes, classifyFile } from '../../assets/js/roms.js';
 import { runRom } from '../../assets/js/emulator.js';
 import { exportConsole } from '../../assets/js/export.js';
+import { autoAttach } from '../../assets/js/features.js';
+autoAttach('n64');
 const AUDIO={on:true};
 document.addEventListener('pointerdown', function once(){try{audioCtx();}catch{}}, {once:true});
 window.addEventListener('load', () => {
@@ -67,7 +69,7 @@ function openSettings(){
   t.onclick=()=>{AUDIO.on=!AUDIO.on; t.classList.toggle('on',AUDIO.on);};
   document.getElementById('n64-export').onclick=async()=>{
     try { await exportConsole({ title:'N64 Menu — Standalone', htmlUrl:'index.html', cssUrls:['n64.css'],
-      jsModules:['n64.js','../../assets/js/sound.js','../../assets/js/roms.js','../../assets/js/emulator.js','../../assets/js/export.js']});}
+      jsModules:['n64.js','../../assets/js/sound.js','../../assets/js/roms.js','../../assets/js/emulator.js','../../assets/js/export.js','../../assets/js/features.js']});}
     catch(e){ alert('Export failed: '+e.message);}
   };
 }

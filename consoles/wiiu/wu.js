@@ -2,6 +2,8 @@ import { play, ctx as audioCtx } from '../../assets/js/sound.js';
 import { listRoms, addRom, removeRom, formatBytes, classifyFile } from '../../assets/js/roms.js';
 import { runRom } from '../../assets/js/emulator.js';
 import { exportConsole } from '../../assets/js/export.js';
+import { autoAttach } from '../../assets/js/features.js';
+autoAttach('wiiu');
 
 const AUDIO = { on: true };
 document.addEventListener('pointerdown', function once() { try{audioCtx();}catch{} }, { once: true });
@@ -139,7 +141,7 @@ function openSettings() {
         title: 'Wii U Menu — Standalone',
         htmlUrl: 'index.html',
         cssUrls: ['wu.css'],
-        jsModules: ['wu.js','../../assets/js/sound.js','../../assets/js/roms.js','../../assets/js/emulator.js','../../assets/js/export.js'],
+        jsModules: ['wu.js','../../assets/js/sound.js','../../assets/js/roms.js','../../assets/js/emulator.js','../../assets/js/export.js','../../assets/js/features.js'],
       });
     } catch(e){ alert('Export failed: '+e.message);}
   };

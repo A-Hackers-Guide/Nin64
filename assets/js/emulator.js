@@ -35,6 +35,8 @@ export async function runRom(consoleKey, romId, mountEl, { onReady } = {}) {
   const rom = await getRom(romId);
   if (!rom) throw new Error('ROM not found');
 
+  try { window.dispatchEvent(new CustomEvent('play:start', { detail: { console: consoleKey, romId } })); } catch {}
+
   // Stage a game container
   mountEl.innerHTML = '';
   const game = document.createElement('div');
@@ -54,9 +56,13 @@ export async function runRom(consoleKey, romId, mountEl, { onReady } = {}) {
   window.EJS_color = '#60a5fa';
   window.EJS_Buttons = {
     playPause: true, restart: true, mute: true, settings: true, fullscreen: true,
-    saveState: true, loadState: true, screenshot: true, screenRecord: false,
+    saveState: true, loadState: true, screenshot: true, screenRecord: true,
     quickSave: true, quickLoad: true, exitEmulation: true,
+    gamepad: true, cheat: true, cacheManager: true,
+    diskButton: true, contextMenuButton: true,
   };
+  window.EJS_cheats = true;
+  window.EJS_defaultControls = undefined; // use EmulatorJS defaults; user can remap in Settings > Controls
   window.EJS_ready = () => onReady?.();
 
   // Inject loader script if not already present

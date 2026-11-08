@@ -1,0 +1,47 @@
+/* Game Boy — dot-matrix green */
+:root{--bg:#8fa663;--fg:#1e2a0f;--dark:#4a5a28;--mid:#6b7a3a;--shell:#d9e3a7;}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;height:100%;background:#282a28;color:var(--fg);font-family:"VT323","Courier New",monospace;overflow:hidden;user-select:none;-webkit-user-select:none;}
+
+.shell{position:fixed;inset:0;display:grid;place-items:center;z-index:5;background:linear-gradient(140deg,#d0d4a0,#a8b088);}
+.device{width:min(700px,92vw);background:var(--shell);border-radius:10px 10px 50px 10px;padding:40px 40px 100px;box-shadow:0 20px 50px rgba(0,0,0,.5),inset 0 1px 0 #fff;border:1px solid var(--mid);}
+.screen{background:var(--mid);padding:30px 50px 40px;border-radius:4px;box-shadow:inset 0 6px 14px rgba(0,0,0,.4);}
+.lcd{background:var(--bg);color:var(--fg);padding:16px 20px;border:1px solid var(--dark);min-height:300px;box-shadow:inset 0 0 20px rgba(74,90,40,.3);}
+.lcd::before{content:'';position:absolute;}
+.lcd .power{display:flex;align-items:center;gap:10px;font-size:16px;letter-spacing:.2em;margin-bottom:14px;color:var(--dark);}
+.lcd .power .led{width:10px;height:10px;border-radius:50%;background:#dc2626;box-shadow:0 0 6px rgba(220,38,38,.8);}
+.lcd .brand{font-size:28px;font-weight:700;color:var(--dark);text-align:center;letter-spacing:.1em;margin:20px 0;}
+.lcd .brand .nin{font-style:italic;font-size:14px;}
+.lcd .menu{margin-top:30px;display:grid;gap:6px;max-height:160px;overflow:auto;}
+.lcd .menu-item{padding:6px 10px;cursor:pointer;font-size:18px;letter-spacing:.05em;}
+.lcd .menu-item:hover,.lcd .menu-item.sel{background:var(--dark);color:var(--bg);}
+.lcd .menu-item.sel::before{content:'▶ ';}
+
+.ctrls{display:grid;grid-template-columns:auto 1fr auto;gap:20px;align-items:center;margin-top:30px;padding:0 30px;}
+.dpad{display:grid;grid-template-columns:repeat(3,22px);grid-template-rows:repeat(3,22px);}
+.dpad span{background:#1e2a0f;}
+.dpad .mid{background:#1e2a0f;}
+.btn-group{display:flex;gap:16px;align-items:center;}
+.ab{width:36px;height:36px;border-radius:50%;background:#8e2a60;border:2px solid #5a1a3e;color:#fff;font-weight:700;display:grid;place-items:center;transform:rotate(-15deg);box-shadow:0 2px 0 #3a0e28;}
+.ss{display:flex;flex-direction:column;gap:6px;margin:0 20px;}
+.ss .pill{background:#6b7a3a;color:#fff;font-size:10px;padding:2px 10px;border-radius:4px;letter-spacing:.1em;transform:skewY(-15deg);}
+
+.speaker{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-top:20px;padding:0 60px;transform:rotate(-30deg);width:80px;margin-left:auto;}
+.speaker span{height:40px;background:var(--mid);border-radius:2px;}
+
+/* modals */
+.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(40,42,40,.9);z-index:60;}
+.modal.on{display:flex;}
+.sheet{width:min(560px,94vw);max-height:86vh;background:var(--shell);border:2px solid var(--dark);border-radius:8px;padding:28px;overflow:auto;color:var(--fg);}
+.sheet h2{margin:0 0 6px;font-size:22px;color:var(--dark);}
+.sheet .lead{color:var(--mid);font-size:13px;margin:0 0 20px;}
+.setrow{display:grid;grid-template-columns:1fr auto;padding:12px 0;border-bottom:1px solid var(--mid);align-items:center;font-size:16px;}
+.setrow input[type=text]{background:var(--bg);color:var(--fg);border:1px solid var(--dark);padding:6px 10px;font-family:inherit;font-size:16px;outline:none;}
+.toggle{position:relative;width:44px;height:24px;background:var(--mid);cursor:pointer;}.toggle.on{background:var(--dark);}.toggle::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;background:#fff;transition:left .15s;}.toggle.on::after{left:22px;}
+.gbtn{padding:10px 16px;background:var(--dark);color:var(--bg);border:0;font-family:inherit;font-size:14px;cursor:pointer;letter-spacing:.1em;}
+.gbtn.ghost{background:transparent;color:var(--dark);border:2px solid var(--dark);}
+.rom-row{display:grid;grid-template-columns:1fr auto auto;gap:10px;padding:10px 14px;border:1px solid var(--mid);align-items:center;font-size:14px;margin-bottom:6px;background:var(--bg);}
+.rom-row .play{background:#8e2a60;color:#fff;padding:4px 12px;border:0;cursor:pointer;font-size:12px;font-family:inherit;}
+.emu-mount{position:fixed;inset:0;background:#000;z-index:200;display:none;}.emu-mount.on{display:block;}
+.emu-close{position:fixed;top:12px;right:12px;z-index:210;padding:8px 14px;background:rgba(0,0,0,.6);color:#fff;border:1px solid #333;border-radius:999px;font-size:12px;cursor:pointer;font-family:sans-serif;}
+.emu-unsupported{display:grid;place-items:center;height:100vh;color:#fff;padding:40px;text-align:center;font-family:sans-serif;}

@@ -22,6 +22,9 @@ const EXT_TO_CORE = {
   wux:  { console: 'wiiu',     core: 'unsupported' },
   nsp:  { console: 'switch',   core: 'unsupported' },
   xci:  { console: 'switch',   core: 'unsupported' },
+  gb:   { console: 'gb',       core: 'gambatte' },
+  gbc:  { console: 'gb',       core: 'gambatte' },
+  gba:  { console: 'gba',      core: 'mgba' },
 };
 
 function openDb() {
@@ -48,6 +51,15 @@ export function classifyFile(name) {
 export async function addRom(file) {
   const meta = classifyFile(file.name);
   if (!meta) throw new Error(`Unrecognized ROM extension: ${file.name}`);
+  // Guard disk space. Fail fast if write would exceed quota.
+  try {
+    const { guardWrite } = await import('./storage.js');
+    const guard = await guardWrite(file.size);
+    if (!guard.ok) throw new Error(guard.msg || 'Write cancelled due to disk space.');
+  } catch (e) {
+    if (e && /cancelled|exceed|passes/.test(e.message)) throw e;
+    // storage module missing — proceed quietly
+  }
   const blob = await file.arrayBuffer();
   const db = await openDb();
   const id = await new Promise((resolve, reject) => {

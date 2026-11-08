@@ -198,9 +198,9 @@ main.stage {
 
 .ring {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: clamp(10px, 1.3vw, 22px);
-  width: min(1400px, 96vw);
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: clamp(10px, 1.3vw, 18px);
+  width: min(1500px, 96vw);
   perspective: 1200px;
   animation: ringIn 1.4s 0.3s cubic-bezier(.2,.9,.3,1.1) both;
 }
@@ -208,8 +208,6 @@ main.stage {
   from { opacity: 0; transform: translateY(40px) rotateX(10deg) scale(0.96); }
   to   { opacity: 1; transform: translateY(0) rotateX(0) scale(1); }
 }
-@media (max-width: 1100px) { .ring { grid-template-columns: repeat(4, 1fr); } }
-@media (max-width: 700px)  { .ring { grid-template-columns: repeat(2, 1fr); } }
 
 .card {
   position: relative;
@@ -334,8 +332,84 @@ footer.hardware {
   color: var(--text);
   background: rgba(14,22,54,0.4);
   backdrop-filter: blur(6px);
+  cursor: default;
+  transition: border-color 0.2s ease;
 }
+.pill.clickable { cursor: pointer; }
+.pill.clickable:hover { border-color: var(--accent); }
 .pill b { color: var(--accent); margin-left: 6px; }
+
+/* Storage bar sliver inside the pill */
+.pill .bar {
+  display: inline-block;
+  vertical-align: middle;
+  width: 32px; height: 6px;
+  border-radius: 3px;
+  background: rgba(130,170,255,0.15);
+  margin-left: 6px;
+  overflow: hidden;
+  position: relative;
+}
+.pill .bar .fill {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: var(--accent);
+  transition: width 0.6s cubic-bezier(.2,.9,.3,1.1), background 0.3s ease;
+}
+
+/* Storage modal content */
+.storage-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin: 14px 0 20px;
+}
+.storage-cell {
+  padding: 14px;
+  border: 1px solid var(--card-stroke);
+  border-radius: 10px;
+  background: rgba(14,22,54,0.5);
+}
+.storage-cell .label { font-size: 10px; letter-spacing: 0.2em; color: var(--text-dim); text-transform: uppercase; }
+.storage-cell .v     { font-size: 20px; font-weight: 800; margin-top: 4px; }
+.storage-cell .sub   { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+
+.ring-big {
+  position: relative;
+  width: 120px; height: 120px;
+  display: grid; place-items: center;
+  margin: 0 auto 10px;
+}
+.ring-big svg { transform: rotate(-90deg); width: 120px; height: 120px; }
+.ring-big .bg { fill: none; stroke: rgba(255,255,255,0.08); stroke-width: 10; }
+.ring-big .fg { fill: none; stroke: var(--accent); stroke-width: 10; stroke-linecap: round; transition: stroke-dashoffset 1s cubic-bezier(.2,.9,.3,1.1), stroke 0.3s ease; }
+.ring-big .pct { position: absolute; font-size: 28px; font-weight: 900; }
+
+.clear-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(96,165,250,0.12);
+  font-size: 13px;
+  gap: 10px;
+}
+.clear-row:last-of-type { border-bottom: 0; }
+.clear-row .meta { color: var(--text-dim); font-size: 11px; margin-top: 2px; }
+.clear-row .cbtn {
+  padding: 6px 14px;
+  background: transparent;
+  color: var(--locked);
+  border: 1px solid var(--locked);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+}
+.clear-row .cbtn:hover { background: var(--locked); color: #fff; }
+.clear-row .cbtn.danger { color: #fff; background: var(--locked); border-color: var(--locked); }
 
 .score-ring {
   position: relative;

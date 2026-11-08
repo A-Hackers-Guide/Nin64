@@ -92,6 +92,16 @@ const CATALOG = {
     { id: 'snes-first-rom',  name: 'Cartridge Click',            desc: 'Add an SNES ROM.' },
     { id: 'snes-play',       name: 'Rainbow Buttons',            desc: 'Launch an SNES game.' },
   ],
+  gb: [
+    { id: 'gb-boot',         name: 'Battery Check',              desc: 'Power on the Game Boy.' },
+    { id: 'gb-first-rom',    name: 'Grey Cart',                  desc: 'Add a .gb or .gbc ROM.' },
+    { id: 'gb-play',         name: 'Dot Matrix',                 desc: 'Launch a Game Boy game.' },
+  ],
+  gba: [
+    { id: 'gba-boot',        name: 'Horizontal Hold',            desc: 'Power on the GBA.' },
+    { id: 'gba-first-rom',   name: 'Indigo Insert',              desc: 'Add a .gba ROM.' },
+    { id: 'gba-play',        name: '32 Bits of Sun',             desc: 'Launch a GBA game.' },
+  ],
 };
 
 export function catalog(consoleKey) { return CATALOG[consoleKey] || []; }
@@ -253,19 +263,19 @@ function showToast(title, desc) {
 
 /* Boot-up achievement trigger: every console calls this once on load. */
 export async function recordBoot(consoleKey) {
-  const bootKey = { wii:'wii-boot', gamecube:'gc-boot', wiiu:'wu-boot', switch:'sw-boot', n64:'n64-boot', nes:'nes-start', snes:'snes-start' }[consoleKey];
+  const bootKey = { wii:'wii-boot', gamecube:'gc-boot', wiiu:'wu-boot', switch:'sw-boot', n64:'n64-boot', nes:'nes-start', snes:'snes-start', gb:'gb-boot', gba:'gba-boot' }[consoleKey];
   if (bootKey) await unlock(consoleKey, bootKey);
 }
 
 export async function recordRomAdded(consoleKey, totalCount) {
-  const firstKey = { wii:'wii-first-rom', gamecube:'gc-first-rom', wiiu:'wu-first-rom', n64:'n64-first-rom', nes:'nes-first-rom', snes:'snes-first-rom' }[consoleKey];
+  const firstKey = { wii:'wii-first-rom', gamecube:'gc-first-rom', wiiu:'wu-first-rom', n64:'n64-first-rom', nes:'nes-first-rom', snes:'snes-first-rom', gb:'gb-first-rom', gba:'gba-first-rom' }[consoleKey];
   if (firstKey && totalCount >= 1) await unlock(consoleKey, firstKey);
   if (consoleKey === 'wii' && totalCount >= 10) await unlock('wii', 'wii-ten');
   if (consoleKey === 'switch' && totalCount >= 10) await unlock('switch', 'sw-ten');
 }
 
 export async function recordPlay(consoleKey) {
-  const playKey = { wii:'wii-play', gamecube:'gc-play', n64:'n64-play', nes:'nes-play', snes:'snes-play' }[consoleKey];
+  const playKey = { wii:'wii-play', gamecube:'gc-play', n64:'n64-play', nes:'nes-play', snes:'snes-play', gb:'gb-play', gba:'gba-play' }[consoleKey];
   if (playKey) await unlock(consoleKey, playKey);
 }
 

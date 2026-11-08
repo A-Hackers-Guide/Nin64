@@ -50,6 +50,7 @@
       <span id="hw-mem"   class="pill">RAM<b>–</b></span>
       <span id="hw-gpu"   class="pill">GPU<b>–</b></span>
       <span id="hw-wasm"  class="pill">WASM<b>–</b></span>
+      <span id="hw-disk"  class="pill clickable" title="Open storage manager">DISK<b>–</b><span class="bar"><span class="fill" style="width:0%"></span></span></span>
     </div>
     <div class="hw-center">
       <div class="score-ring">
@@ -90,6 +91,63 @@
 
     <h2 style="margin-top:24px;font-size:16px">Your ROMs</h2>
     <div id="rom-list" class="rom-list"></div>
+  </div>
+</div>
+
+<!-- Storage modal -->
+<div id="storage-modal" class="modal">
+  <div class="sheet">
+    <button id="close-storage" class="close-x">✕</button>
+    <h2>Local Storage</h2>
+    <p class="lead">Nin64 stores ROMs, screenshots, saves and achievements in your browser's IndexedDB. Nothing uploads. The browser caps each site — here's what's happening.</p>
+
+    <div style="display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center;margin-bottom:10px">
+      <div class="ring-big">
+        <svg viewBox="0 0 120 120">
+          <circle class="bg" cx="60" cy="60" r="50"/>
+          <circle id="storage-ring" class="fg" cx="60" cy="60" r="50" stroke-dasharray="314" stroke-dashoffset="314"/>
+        </svg>
+        <div class="pct" id="storage-pct">—</div>
+      </div>
+      <div>
+        <div style="font-size:14px;letter-spacing:0.08em"><span id="storage-usage">—</span> used of <span id="storage-quota">—</span></div>
+        <div style="color:var(--text-dim);font-size:12px;margin-top:4px" id="storage-label">Benchmarking…</div>
+        <div style="margin-top:12px;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-dim)">
+          Persistence: <span id="storage-persisted" style="color:var(--accent-3)">—</span>
+          <button id="btn-persist" class="btn" style="margin-left:10px;padding:4px 12px;font-size:10px;display:none">Request persistent</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="storage-grid">
+      <div class="storage-cell"><div class="label">ROMs</div><div class="v" id="st-roms">—</div><div class="sub" id="st-roms-sub">—</div></div>
+      <div class="storage-cell"><div class="label">Screenshots</div><div class="v" id="st-shots">—</div><div class="sub" id="st-shots-sub">—</div></div>
+      <div class="storage-cell"><div class="label">Saves</div><div class="v" id="st-saves">—</div><div class="sub" id="st-saves-sub">—</div></div>
+      <div class="storage-cell"><div class="label">Other</div><div class="v" id="st-other">—</div><div class="sub">index + trophies</div></div>
+    </div>
+
+    <h2 style="font-size:16px;margin-top:20px">Clear data</h2>
+    <p class="lead" style="font-size:12px">Each button removes only that bucket. Trophies stay unless you clear them explicitly.</p>
+    <div class="clear-row">
+      <div><b>ROMs</b><div class="meta">All consoles · <span id="cr-roms">—</span></div></div>
+      <button class="cbtn" data-clear="roms">Clear ROMs</button>
+    </div>
+    <div class="clear-row">
+      <div><b>Screenshots</b><div class="meta"><span id="cr-shots">—</span></div></div>
+      <button class="cbtn" data-clear="shots">Clear screenshots</button>
+    </div>
+    <div class="clear-row">
+      <div><b>Save states</b><div class="meta"><span id="cr-saves">—</span></div></div>
+      <button class="cbtn" data-clear="saves">Clear saves</button>
+    </div>
+    <div class="clear-row">
+      <div><b>Achievements</b><div class="meta">Resets trophy progress across every console</div></div>
+      <button class="cbtn" data-clear="trophies">Clear trophies</button>
+    </div>
+    <div class="clear-row">
+      <div><b>Everything except trophies</b><div class="meta">ROMs + screenshots + saves + playtime</div></div>
+      <button class="cbtn danger" data-clear="all">Clear all</button>
+    </div>
   </div>
 </div>
 

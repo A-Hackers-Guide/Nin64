@@ -1,6 +1,9 @@
 import { benchmark, unlocked, tierFor, TIERS } from './hardware.js';
 import { play, ctx as audioCtx } from './sound.js';
 import { addRom, listRoms, removeRom, formatBytes, classifyFile } from './roms.js';
+import { quota, sizes, isPersistent, requestPersistent,
+         clearRoms, clearScreenshots, clearSaves, clearAchievements, clearEverything,
+         ratioToLabel, ratioColor } from './storage.js';
 
 /* ---------- Starfield ---------- */
 function starfield(canvas) {
@@ -102,6 +105,8 @@ const CONSOLES = [
   { key: 'wiiu',     name: 'Wii U',      sub: '2012',                  tier: 4 },
   { key: 'switch',   name: 'Switch',     sub: '2017',                  tier: 4 },
   { key: 'n64',      name: 'N64',        sub: '1996',                  tier: 2 },
+  { key: 'gba',      name: 'Game Boy Advance', sub: '2001',            tier: 1 },
+  { key: 'gb',       name: 'Game Boy',   sub: '1989',                  tier: 1 },
   { key: 'snes',     name: 'SNES',       sub: '1990',                  tier: 1 },
   { key: 'nes',      name: 'NES',        sub: '1983',                  tier: 1 },
 ];
@@ -156,6 +161,27 @@ const SILHOUETTES = {
     <circle cx="70" cy="80" r="3" fill="#eab308"/>
     <circle cx="84" cy="80" r="3" fill="#16a34a"/>
     <rect x="36" y="100" width="48" height="4" rx="1" fill="#6b7280"/>
+  </svg>`,
+  gb: `<svg viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg">
+    <rect x="30" y="18" width="60" height="124" rx="6" fill="#d9e3a7" stroke="#6b7a3a" stroke-width="1.5"/>
+    <rect x="36" y="30" width="48" height="36" rx="2" fill="#4a5a28"/>
+    <rect x="40" y="34" width="40" height="28" fill="#8fa663"/>
+    <circle cx="45" cy="82" r="6" fill="#4a3030"/>
+    <circle cx="45" cy="82" r="3" fill="#2a1a1a"/>
+    <circle cx="68" cy="82" r="3" fill="#8e2a60"/>
+    <circle cx="78" cy="82" r="3" fill="#8e2a60"/>
+    <rect x="48" y="110" width="24" height="3" rx="1" fill="#6b7a3a"/>
+    <rect x="48" y="118" width="24" height="3" rx="1" fill="#6b7a3a"/>
+  </svg>`,
+  gba: `<svg viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg">
+    <rect x="10" y="50" width="100" height="56" rx="12" fill="#6b21a8" stroke="#a855f7" stroke-width="1.5"/>
+    <rect x="34" y="58" width="52" height="38" rx="3" fill="#1e1b4b"/>
+    <rect x="37" y="61" width="46" height="32" fill="#4c1d95"/>
+    <circle cx="22" cy="70" r="3" fill="#1e1b4b"/>
+    <circle cx="22" cy="86" r="3" fill="#1e1b4b"/>
+    <circle cx="96" cy="72" r="3" fill="#dc2626"/>
+    <circle cx="104" cy="82" r="3" fill="#16a34a"/>
+    <rect x="16" y="78" width="4" height="4" fill="#1e1b4b"/>
   </svg>`,
   nes: `<svg viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg">
     <rect x="12" y="60" width="96" height="40" rx="2" fill="#d1d5db" stroke="#9ca3af" stroke-width="1"/>
@@ -280,6 +306,104 @@ async function init() {
   document.getElementById('close-info').addEventListener('click', () => {
     document.getElementById('info-modal').classList.remove('open');
   });
+
+  // Storage
+  await paintStorage();
+  document.getElementById('hw-disk').addEventListener('click', openStorage);
+  document.getElementById('close-storage').addEventListener('click', () => {
+    document.getElementById('storage-modal').classList.remove('open');
+  });
+  // Re-paint storage after adds/removes
+  window.addEventListener('rom:added', paintStorage);
+}
+
+/* ---------- Storage ---------- */
+
+async function paintStorage() {
+  const q = await quota();
+  const pill = document.getElementById('hw-disk');
+  const fill = pill.querySelector('.fill');
+  const bold = pill.querySelector('b');
+  if (q.unknown) {
+    bold.textContent = 'n/a';
+    fill.style.width = '0%';
+    return;
+  }
+  const pct = Math.round(q.ratio * 100);
+  bold.textContent = `${pct}%`;
+  bold.style.color = ratioColor(q.ratio);
+  fill.style.width = `${pct}%`;
+  fill.style.background = ratioColor(q.ratio);
+}
+
+async function openStorage() {
+  const m = document.getElementById('storage-modal');
+  m.classList.add('open');
+  await refreshStorage();
+
+  // Wire clear buttons once
+  if (!m.dataset.wired) {
+    m.dataset.wired = '1';
+    m.querySelectorAll('[data-clear]').forEach(b => b.onclick = async () => {
+      const t = b.dataset.clear;
+      const confirms = {
+        roms:     'Delete every ROM in every console library?',
+        shots:    'Delete every screenshot?',
+        saves:    'Delete every save state?',
+        trophies: 'Reset every trophy you have unlocked?',
+        all:      'Delete every ROM, screenshot, save state and playtime record? (Trophies kept.)',
+      };
+      if (!window.confirm(confirms[t])) return;
+      if      (t === 'roms')     await clearRoms();
+      else if (t === 'shots')    await clearScreenshots();
+      else if (t === 'saves')    await clearSaves();
+      else if (t === 'trophies') await clearAchievements();
+      else if (t === 'all')      await clearEverything();
+      await refreshStorage();
+      await paintStorage();
+      window.dispatchEvent(new CustomEvent('rom:added')); // trigger redraws
+    });
+    document.getElementById('btn-persist').onclick = async () => {
+      const ok = await requestPersistent();
+      alert(ok ? 'Persistent storage granted — your browser won\'t silently evict Nin64 data.'
+               : 'Your browser declined persistent storage. Data may be evicted under pressure.');
+      refreshStorage();
+    };
+  }
+}
+
+async function refreshStorage() {
+  const q = await quota();
+  const s = await sizes();
+  document.getElementById('storage-usage').textContent = q.unknown ? 'unknown' : formatBytes(q.usage);
+  document.getElementById('storage-quota').textContent = q.unknown ? 'unknown' : formatBytes(q.quota);
+  document.getElementById('storage-label').textContent = q.unknown ? 'Browser doesn\'t expose quota.' : `${ratioToLabel(q.ratio)} — ${(q.ratio*100).toFixed(1)}% of your Nin64 cap in this browser.`;
+
+  const ring = document.getElementById('storage-ring');
+  const circ = 2 * Math.PI * 50;
+  ring.setAttribute('stroke-dasharray', circ);
+  ring.setAttribute('stroke-dashoffset', circ * (1 - (q.ratio || 0)));
+  ring.setAttribute('stroke', ratioColor(q.ratio || 0));
+  document.getElementById('storage-pct').textContent = q.unknown ? '—' : `${Math.round(q.ratio * 100)}%`;
+  document.getElementById('storage-pct').style.color = ratioColor(q.ratio || 0);
+
+  const persisted = await isPersistent();
+  const per = document.getElementById('storage-persisted');
+  per.textContent = persisted ? 'granted' : 'not granted';
+  per.style.color = persisted ? 'var(--accent-3)' : 'var(--locked)';
+  document.getElementById('btn-persist').style.display = persisted ? 'none' : '';
+
+  document.getElementById('st-roms').textContent    = formatBytes(s.roms);
+  document.getElementById('st-roms-sub').textContent = `${s.counts.roms} file${s.counts.roms === 1 ? '' : 's'}`;
+  document.getElementById('st-shots').textContent   = formatBytes(s.screenshots);
+  document.getElementById('st-shots-sub').textContent = `${s.counts.screenshots} image${s.counts.screenshots === 1 ? '' : 's'}`;
+  document.getElementById('st-saves').textContent   = formatBytes(s.saves);
+  document.getElementById('st-saves-sub').textContent = `${s.counts.saves} state${s.counts.saves === 1 ? '' : 's'}`;
+  document.getElementById('st-other').textContent   = formatBytes(Math.max(0, (q.usage || 0) - s.total));
+
+  document.getElementById('cr-roms').textContent  = `${s.counts.roms} file${s.counts.roms === 1 ? '' : 's'} · ${formatBytes(s.roms)}`;
+  document.getElementById('cr-shots').textContent = `${s.counts.screenshots} · ${formatBytes(s.screenshots)}`;
+  document.getElementById('cr-saves').textContent = `${s.counts.saves} · ${formatBytes(s.saves)}`;
 }
 
 if (document.readyState === 'loading') {

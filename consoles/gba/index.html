@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GBA — Nin64</title>
+<link rel="stylesheet" href="gba.css">
+</head>
+<body>
+
+<div class="stage">
+  <div class="device" style="position:relative">
+    <div class="shoulder left"></div>
+    <div class="shoulder right"></div>
+    <div class="dpad">
+      <span class="empty"></span><span></span><span class="empty"></span>
+      <span></span><span></span><span></span>
+      <span class="empty"></span><span></span><span class="empty"></span>
+    </div>
+    <div class="screen" style="position:relative">
+      <div class="lcd">
+        <div class="power"><span><span class="led"></span>POWER</span><span>GAME BOY <b>ADVANCE</b></span></div>
+        <div class="brand"><span class="n">Nintendo</span><br>GBA</div>
+        <div class="menu" id="menu"></div>
+      </div>
+      <div class="ss"><div class="pill">SELECT</div><div class="pill">START</div></div>
+    </div>
+    <div class="ab">
+      <div class="btn">B</div>
+      <div class="btn" style="background:#a78bfa">A</div>
+    </div>
+  </div>
+</div>
+
+<div id="library-modal" class="modal">
+  <div class="sheet">
+    <h2>GBA Library</h2>
+    <p class="lead">Add .gba files — stored locally in your browser.</p>
+    <div style="display:flex;gap:10px;margin-bottom:14px">
+      <button class="gbtn" id="lib-add">Add ROM</button>
+      <input type="file" id="lib-input" multiple accept=".gba" hidden>
+      <button class="gbtn ghost" data-close>Back</button>
+    </div>
+    <div id="lib-list"></div>
+  </div>
+</div>
+
+<div id="settings-modal" class="modal">
+  <div class="sheet">
+    <h2>Options</h2>
+    <p class="lead">Nin64 GBA 1.0</p>
+    <div class="setrow"><span>Name</span><input type="text" id="gba-user"></div>
+    <div class="setrow"><span>Sound</span><div class="toggle on" id="gba-sound"></div></div>
+    <div style="display:flex;gap:10px;margin-top:20px;justify-content:space-between">
+      <button class="gbtn" id="gba-export">Export this console as HTML</button>
+      <button class="gbtn ghost" data-close>Back</button>
+    </div>
+  </div>
+</div>
+
+<div class="emu-mount" id="emu-mount"></div>
+<button class="emu-close" id="emu-close" style="display:none">Stop</button>
+
+<script type="module" src="gba.js"></script>
+</body>
+</html>

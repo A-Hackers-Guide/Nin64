@@ -17,6 +17,8 @@ const CORE_FOR = {
   n64: 'mupen64plus_next',
   gamecube: 'dolphin',
   wii: 'dolphin',
+  gb: 'gambatte',
+  gba: 'mgba',
 };
 
 export function canEmulate(consoleKey) {

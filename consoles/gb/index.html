@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Game Boy — Nin64</title>
+<link rel="stylesheet" href="gb.css">
+</head>
+<body>
+
+<div class="shell">
+  <div class="device">
+    <div class="screen">
+      <div class="lcd">
+        <div class="power"><div class="led"></div> BATTERY</div>
+        <div class="brand"><span class="nin">Nintendo</span><br>GAME BOY</div>
+        <div class="menu" id="menu"></div>
+      </div>
+    </div>
+    <div class="ctrls">
+      <div class="dpad">
+        <span></span><span style="background:#1e2a0f"></span><span></span>
+        <span style="background:#1e2a0f"></span><span class="mid"></span><span style="background:#1e2a0f"></span>
+        <span></span><span style="background:#1e2a0f"></span><span></span>
+      </div>
+      <div class="ss"><div class="pill">SELECT</div><div class="pill">START</div></div>
+      <div class="btn-group"><div class="ab">B</div><div class="ab">A</div></div>
+    </div>
+  </div>
+</div>
+
+<div id="library-modal" class="modal">
+  <div class="sheet">
+    <h2>Game Boy Library</h2>
+    <p class="lead">Add .gb / .gbc files — stored locally in your browser.</p>
+    <div style="display:flex;gap:10px;margin-bottom:14px">
+      <button class="gbtn" id="lib-add">Add ROM</button>
+      <input type="file" id="lib-input" multiple accept=".gb,.gbc" hidden>
+      <button class="gbtn ghost" data-close>Back</button>
+    </div>
+    <div id="lib-list"></div>
+  </div>
+</div>
+
+<div id="settings-modal" class="modal">
+  <div class="sheet">
+    <h2>Options</h2>
+    <p class="lead">Nin64 Game Boy 1.0</p>
+    <div class="setrow"><span>Name</span><input type="text" id="gb-user"></div>
+    <div class="setrow"><span>Sound</span><div class="toggle on" id="gb-sound"></div></div>
+    <div style="display:flex;gap:10px;margin-top:20px;justify-content:space-between">
+      <button class="gbtn" id="gb-export">Export this console as HTML</button>
+      <button class="gbtn ghost" data-close>Back</button>
+    </div>
+  </div>
+</div>
+
+<div class="emu-mount" id="emu-mount"></div>
+<button class="emu-close" id="emu-close" style="display:none">Stop</button>
+
+<script type="module" src="gb.js"></script>
+</body>
+</html>
